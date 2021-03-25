@@ -1,35 +1,40 @@
 #include <stdio.h>
-#define N 3
+#include <stdlib.h>
 
-typedef struct student{
-    char name[10];
-    char add[10];
-    int yz;
-    int number;
-}STU;
-
-void input(STU *p,int n)
+typedef struct node
 {
-    int i;
-    for(i=0;i < N;i++)
-    {
-        scanf("%s%s%d%d",p[i].name,p[i].add,&p[i].yz,&p[i].number);
-    }
-}
+    int data;
+    struct node *next;
 
-void output(STU *p,int n)
+}lian;      //定义链表结构体lian
+
+void Biao(lian *head,int i)     //生成新节点连接到链表并赋值
 {
-    printf("\t姓名\t家庭住址\t邮政编码\t电话号码\t\n");
-    for(int i=0;i<N;i++)
+    lian *nullNextNode = head;
+    while (1)
     {
-        printf("\t%s\t%s\t%d\t%d\t\n",p[i].name,p[i].add,p[i].yz,p[i].number);
+        if (nullNextNode->next != NULL)
+        {
+            nullNextNode = nullNextNode->next;
+            printf("ed");
+        }else{
+            printf("a");
+            nullNextNode = (lian * )malloc(sizeof(lian));
+            nullNextNode->data = i++;
+            nullNextNode->next = NULL;
+            break;
+        }
     }
+    printf("%d\n%d",nullNextNode->data);
 }
 
 int main()
 {
-    STU student[N];
-    input(student,N);
-    output(student,N);
-    return 0;
+    lian head;
+    head.next = NULL;
+    int i = 0;
+    Biao(&head,i);
+    Biao(&head,i);
+    printf("%d\n%d",head.next->data,head.next->next->data);
 }
+

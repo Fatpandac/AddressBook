@@ -327,7 +327,7 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
  * 时间：2021.03.24
  *
  */
-void SharePerson(PersonList PersonList,int argc,char *argv[])
+int SharePerson(PersonList PersonList,int argc,char *argv[])
 {
     char shareName[10];
     if (argc == optList[5].countArgument)
@@ -354,8 +354,11 @@ void SharePerson(PersonList PersonList,int argc,char *argv[])
             printf("%s","+-----------------------------+\n");
             printf("|%10s:%-20s|\n","地址",PersonList.person[i].address);
             printf("%s","+-----------------------------+\n");
+            return 0;
         }
     }
+    printf("%s","此联系人不存在!!!\n");
+    return 0;
 }
 
 /*
@@ -421,6 +424,54 @@ int ResetPerson(PersonList *PersonList)
 }
 
 /*
+ * 简介：将数据保存到文件中
+ * 作者：Fatpandac
+ * 时间：2021.03.25
+ *
+ */
+
+int SavePerson(PersonList PersonList,char language[10])
+{
+    FILE *savePerson = fopen("AddressBook.txt","wb");
+    if (savePerson == NULL)
+    {
+        printf("%s\n","写入失败");
+        return 0;
+    }
+    fprintf(savePerson,"系统语言为%s\n",language);
+    fprintf(savePerson,"共有%d位联系人\n",PersonList.lenght);
+    for (int i = 0;i < PersonList.lenght;i++)
+    {
+        fprintf(savePerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address,PersonList.person[i].like);
+    }
+    fclose(savePerson);
+    return 0;
+}
+
+/*
+ * 简介：读取文件获取到通讯录数据
+ * 作者：Fatpandac
+ * 时间：2021.03.25
+ */
+
+int ReadPerson(PersonList *PersonList,char *language)
+{
+    FILE *readPerson = fopen("AddressBook.txt","rb");
+    if (readPerson == NULL)
+    {
+        printf("%s\n","读取失败");
+        return 0;
+    }
+    fscanf(readPerson,"系统语言为%s\n",language);
+    fscanf(readPerson,"共有%d位联系人\n",&PersonList->lenght);
+    for (int i = 0;i < PersonList->lenght;i++)
+    {
+        fscanf(readPerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList->person[i].name,&PersonList->person[i].sex,PersonList->person[i].phoneNumber,PersonList->person[i].email,&PersonList->person[i].postCode,PersonList->person[i].address,&PersonList->person[i].like);
+    }
+    fclose(readPerson);
+    return 0;
+}
+/*
  * 简介：输出操作目录
  * 作者：Fatpandac
  * 时间：2021.03.20
@@ -447,14 +498,9 @@ int menu()
 int main(int argc,char *argv[])     //argc 输入参数数量； argv 输入的参数
 {
     PersonList PersonList;
-    PersonList.lenght = 1;      //初始化联系人列表
-    strcpy(PersonList.person[0].name,"ztf");
-    PersonList.person[0].sex = 'M';
-    strcpy(PersonList.person[0].phoneNumber,"1234");
-    strcpy(PersonList.person[0].email,"12421");
-    PersonList.person[0].postCode = 12424;
-    strcpy(PersonList.person[0].address,"hainanchina");
-    PersonList.person[0].like = 1;
+    char language[10];      //用于存储程序语言设置
+    strcpy(language,"CN.txt");  //初始化默认为中文
+    ReadPerson(&PersonList,language);
     while(Ture)
     {
         int opt;        //每次循环初始化,用于存储操作序号
@@ -468,12 +514,15 @@ int main(int argc,char *argv[])     //argc 输入参数数量； argv 输入的�
         {
             case 1:
                 AddPerson(&PersonList,argc,argv);
+                SavePerson(PersonList,language);
                 break;
             case 2:
                 ChangePerson(&PersonList,argc,argv);
+                SavePerson(PersonList,language);
                 break;
             case 3:
                 RemovePerson(&PersonList,argc,argv);
+                SavePerson(PersonList,language);
                 break;
             case 4:
                 DisplayPerson(PersonList,FindPerson(&PersonList,argc,argv));
@@ -483,6 +532,7 @@ int main(int argc,char *argv[])     //argc 输入参数数量； argv 输入的�
                 break;
             case 6:
                 ResetPerson(&PersonList);
+                SavePerson(PersonList,language);
                 break;
             case 7:
                 DisplayPerson(PersonList,-1);
