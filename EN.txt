@@ -1,0 +1,57 @@
+﻿Error command!!!
+Please enter the name of the added contact:
+Please enter
+'s gender (M\W):
+'s phone number:
+'s email address:
+'s zip code:
+'s address:
+Whether to set
+as special concern (Y\N):
+[1] Name search
+[2] Address lookup
+Please enter the corresponding search method serial number:
+Please enter the search content:
+Does not exist! Please re-enter
+This property does not exist, please re-enter
+No value is required to change this property!!!
+No modification value was entered
+Please enter the name of the person you want to modify:
+[1] Modify contact name
+[2] Modify contact gender
+[3] modify contact phone number
+[4] Modify contact email
+[5] Modify contact zip code
+[6] Modify contact address
+[7] Change to not pay attention to
+[7] Change to focus
+Please enter the corresponding serial number:
+Input error, please input again
+Please enter the changed value:
+Change failed!!!
+Please enter the name of the deleted contact:
+Please enter the name of the person you want to share:
+Contact
+Sex
+Phone Number
+Email
+Postcode
+Address
+Like
+Yes
+No
+This contact does not exist!!!
+Write failed!!!
+Read failed!!!
+[1] Language
+[2] Developers
+Successfully modified
+[1] Generate contact information
+[2] Modify contact information
+[3] Delete contact information
+[4] Find contact information
+[5] Share contacts
+[6] Reset address book
+[7] display address book list
+[8] Setting
+[0] exit
