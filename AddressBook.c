@@ -52,8 +52,8 @@ typedef struct
 Opt optList[CmdSize] = {
     {"add","-a","[add | -a] <name>\nCreate a new contact\n",3,1},
     {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,7},
+    {"help","-h","[help | -h] <option>\nDisplay all help,when option is null\n",3,9},
     {"help","-h","[help | -h]\nDisplay all help\n",2,9},
-    {"help","-h","[help | -h] <option>\nDisplay all help\n",3,9},
     {"find","-f","[find | -f] <by element> <value>\nFind the element of the value\n[by element | name | address]\n",4,4},
     {"share","-s","[share | -s] <name>\nShare contact with card\n",3,5},
     {"reset","","[reset]\nReset you AddressBook\n",2,6},
@@ -62,7 +62,7 @@ Opt optList[CmdSize] = {
     {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,3}
 };      //CLI操作数据
 
-char language[LanguageLineSize][50];      //定义语言数组，用于保存对应语言包数据
+char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
 
 /*
  * 简介：加载语言包
@@ -184,7 +184,7 @@ int FindPerson(PersonList *PersonList,int argc,char *argv[])
             }
         }
     }else{
-        printf("%s%s%s"
+        printf("%s\n%s\n%s"
                ,language[10]
                ,language[11]
                ,language[12]);    //"[1] 名字查找\n" "[2] 地址查找\n" "请输入相应查找方式序号："
@@ -231,6 +231,7 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
             if (!strcmp(PersonList->person[i].name,argv[2]))
             {
                 strcpy(chgName,argv[2]);
+                chgIndex = i;
                 for (int i = 0;i < 7;i++)
                 {
                     if (!strcmp(elementlist[i],argv[3]))
@@ -239,7 +240,8 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
                         break;
                     }
                 }
-            }else{
+                break;
+            }else if (i+1 == PersonList->lenght){
                 printf("%s%s",argv[2],language[14]);    //"不存在!!! 请重新输入\n"
                 return 0;
             }
@@ -269,14 +271,15 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
             if (!strcmp(PersonList->person[i].name,chgName))
             {
                 chgIndex = i;
-            }else{
-                printf("%s%s",chgName,language[14]);    //"不存在！！！\n请重新输入\n"
+                break;
+            }else if (i+1 == PersonList->lenght){
+                printf("%s%s",chgName,language[14]);    //"不存在！！！请重新输入\n"
                 return 0;
             }
         }
         while (Ture)
         {
-            printf("%s%s%s%s%s%s"
+            printf("%s\n%s\n%s\n%s\n%s\n%s\n"
                    ,language[19]
                    ,language[20]
                    ,language[21]
@@ -284,12 +287,12 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
                    ,language[23]
                    ,language[24]);    //"[1] 修改联系人姓名\n" "[2] 修改联系人性别\n" "[3] 修改联系人电话\n" "[4] 修改联系人邮箱\n" "[5] 修改联系人邮编\n" "[6] 修改联系人地址\n"
             printf("%s\n",(PersonList->person[chgIndex].like == 1) ? language[25] : language[26] );     //"[7] 修改为不关注" "[7] 修改为关注"
-            printf("%s",language[26]);  //"请输入相应序号："
+            printf("%s",language[27]);  //"请输入相应序号："
             scanf("%d",&chgElemnt);
             if (chgElemnt > 0 && chgElemnt <= 7) break;//判断是否输入错误
-            printf("%s\n",language[27]);    //"输入错误，请重新输入\n"
+            printf("%s\n",language[28]);    //"输入错误，请重新输入\n"
         }
-        if (chgElemnt != 2 || chgElemnt != 7)
+        if (chgElemnt != 2 && chgElemnt != 7)
         {
             printf("%s",language[29]);  //"请输入更改的值："
             scanf("%s",chgValue);
@@ -349,9 +352,12 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
             {
                 PersonList->person[j] = PersonList->person[j+1];
             }
+            PersonList->lenght--;
+        }else if (i+1 == PersonList->lenght){
+            printf("%s\n",language[42]);
+            break;
         }
     }
-    PersonList->lenght--;
     return 0;
 }
 
@@ -361,7 +367,7 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
  * 时间：2021.03.24
  *
  */
-int SharePerson(PersonList PersonList,int argc,char *argv[])
+int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[10])
 {
     char shareName[10];
     if (argc == optList[5].countArgument)
@@ -375,20 +381,40 @@ int SharePerson(PersonList PersonList,int argc,char *argv[])
     {
         if (!strcmp(PersonList.person[i].name,shareName))
         {
-            printf("%s","+-----------------------------+\n");
-            printf("|%11s:%-20s|\n",language[33],PersonList.person[i].name);    //"联系人"
-            printf("%s","+-----------------------------+\n");
-            printf("|%10s:%-20c|\n",language[34],PersonList.person[i].sex);     //"性别"
-            printf("%s","+-----------------------------+\n");
-            printf("|%10s:%-20s|\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
-            printf("%s","+-----------------------------+\n");
-            printf("|%10s:%-20s|\n",language[36],PersonList.person[i].email);   //"电子邮箱"
-            printf("%s","+-----------------------------+\n");
-            printf("|%10s:%-20d|\n",language[37],PersonList.person[i].postCode);    //"邮编"
-            printf("%s","+-----------------------------+\n");
-            printf("|%10s:%-20s|\n",language[38],PersonList.person[i].address);     //"地址"
-            printf("%s","+-----------------------------+\n");
-            return 0;
+
+            if (!strcmp(systemLanguage,"CN.txt"))
+            {
+                printf("%s","+-----------------------------+\n");
+                printf("|%11s:%-20s|\n",language[33],PersonList.person[i].name);    //"联系人"
+                printf("%s","+-----------------------------+\n");
+                printf("|%10s:%-20c|\n",language[34],PersonList.person[i].sex);     //"性别"
+                printf("%s","+-----------------------------+\n");
+                printf("|%10s:%-20s|\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
+                printf("%s","+-----------------------------+\n");
+                printf("|%10s:%-20s|\n",language[36],PersonList.person[i].email);   //"电子邮箱"
+                printf("%s","+-----------------------------+\n");
+                printf("|%10s:%-20d|\n",language[37],PersonList.person[i].postCode);    //"邮编"
+                printf("%s","+-----------------------------+\n");
+                printf("|%10s:%-20s|\n",language[38],PersonList.person[i].address);     //"地址"
+                printf("%s","+-----------------------------+\n");
+                return 0;
+            }else{
+                printf("%s","+------------------------------------+\n");
+                printf("|%15s:%-20s|\n",language[33],PersonList.person[i].name);    //"联系人"
+                printf("%s","+------------------------------------+\n");
+                printf("|%15s:%-20c|\n",language[34],PersonList.person[i].sex);     //"性别"
+                printf("%s","+------------------------------------+\n");
+                printf("|%15s:%-20s|\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
+                printf("%s","+------------------------------------+\n");
+                printf("|%15s:%-20s|\n",language[36],PersonList.person[i].email);   //"电子邮箱"
+                printf("%s","+------------------------------------+\n");
+                printf("|%15s:%-20d|\n",language[37],PersonList.person[i].postCode);    //"邮编"
+                printf("%s","+------------------------------------+\n");
+                printf("|%15s:%-20s|\n",language[38],PersonList.person[i].address);     //"地址"
+                printf("%s","+------------------------------------+\n");
+                return 0;
+            }
+
         }
     }
     printf("%s",language[42]);  //"此联系人不存在!!!\n"
@@ -401,15 +427,21 @@ int SharePerson(PersonList PersonList,int argc,char *argv[])
  * 时间：2021.03.22
  *
  */
-int DisplayPerson(PersonList PersonList,int key)        //key 用于保存指定输出地址，为-1时全输出
+int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        //key 用于保存指定输出地址，为-1时全输出
 {
     printf("%-13s%-8s%-15s%-24s%-10s%-22s%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     if (key == -1)
     {
         for (int i = 0;i < PersonList.lenght;i++)
         {
-            printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
-            printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
+            if (!strcmp(systemLanguage,"CN.txt"))
+            {
+                printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+                printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
+            }else{
+                printf("%-13s%-8c%-15s%-24s%-10d%-22s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+                printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
+            }
         }
     }else{
         int i = key;
@@ -435,12 +467,19 @@ void PrintHelp(int argc,char *argv[])
             if (!strcmp(optList[i].longOptName,argv[2]) || !strcmp(optList[i].shortOptName,argv[2]))
             {
                 printf("%s\n",optList[i].optGuide);
+                break;
+            }else if (i+1 == CmdSize){
+                printf("%s\n",language[15]);
             }
         }
     }else{
         for (int i = 0;i < CmdSize;i++)
         {
             printf("%s\n",optList[i].optGuide);
+            if (!strcmp(optList[i].longOptName,optList[i+1].longOptName))
+            {
+                i++;
+            }
         }
     }
 }
@@ -551,6 +590,7 @@ int Setting(char systemLanguage[10])
     if (choose == 1)
     {
         (!strcmp(systemLanguage,"CN.txt")) ? strcpy(systemLanguage,"EN.txt") : strcpy(systemLanguage,"CN.txt");
+        loadingLanguage(systemLanguage);
         printf("%s",language[47]);  //"更改成功"
         return 0;
     }else{
@@ -615,22 +655,21 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
                 SavePerson(PersonList,systemLanguage);
                 break;
             case 4:
-                DisplayPerson(PersonList,FindPerson(&PersonList,argc,argv));
+                DisplayPerson(PersonList,FindPerson(&PersonList,argc,argv),systemLanguage);
                 break;
             case 5:
-                SharePerson(PersonList,argc,argv);
+                SharePerson(PersonList,argc,argv,systemLanguage);
                 break;
             case 6:
                 ResetPerson(&PersonList);
                 SavePerson(PersonList,systemLanguage);
                 break;
             case 7:
-                DisplayPerson(PersonList,-1);
+                DisplayPerson(PersonList,-1,systemLanguage);
                 break;
             case 8:
                 Setting(systemLanguage);
                 SavePerson(PersonList,systemLanguage);
-                loadingLanguage(systemLanguage);
                 break;
             case 9:
                 PrintHelp(argc,argv);
@@ -639,6 +678,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
                 exit(0);
             default:
                 printf("Err");
+                break;
         }
         if (argc >= 2) break;
         system("pause");
