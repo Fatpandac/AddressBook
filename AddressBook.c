@@ -445,8 +445,14 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
         }
     }else{
         int i = key;
-        printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
-        printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
+        if (!strcmp(systemLanguage,"CN.txt"))
+        {
+            printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+            printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
+        }else{
+            printf("%-13s%-8c%-15s%-24s%-10d%-22s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+            printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
+        }
     }
     return 0;
 }
