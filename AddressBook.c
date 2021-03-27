@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <windows.h>
 
 #define Ture 1
 #define MaxSize 100     //通讯录数组长度
@@ -564,11 +563,9 @@ void DisplayDevelopers()
     printf("MAIN PROGRAME\n");
     printf("---------------------\n");
     printf("ZHENGTINGFEI\n\n");
-    Sleep(500);
     printf("OTHER PROGRAME\n");
     printf("---------------------\n");
     printf("LIUSILI\tZHUTIANWEN\n\n");
-    Sleep(500);
     printf("TRANSLATION\n");
     printf("---------------------\n");
     printf("PENGYUTING\n");
