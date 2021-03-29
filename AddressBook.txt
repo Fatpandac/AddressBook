@@ -1,3 +1,6 @@
-系统语言为EN.txt
-共有1位联系人
+系统语言为CN.txt
+共有4位联系人
 ztf	M	13976512425	1779196284@qq.com	12345	HainanChina	1
+lsl	M	222333	123445@gmail.com	1234	chongqingwanzhou	0
+zmd	M	12345	112233213@qq.com	22233	HainanChina	1
+hjk	M	1234	12441@qq.com	12345	chais	1

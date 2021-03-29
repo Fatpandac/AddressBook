@@ -55,3 +55,4 @@ Successfully modified
 [7] display address book list
 [8] Setting
 [0] exit
+Press any key to continue...

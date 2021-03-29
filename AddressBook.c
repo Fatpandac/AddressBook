@@ -6,7 +6,9 @@
 #define Ture 1
 #define MaxSize 100     //通讯录数组长度
 #define CmdSize 10       //命令操数组长度
-#define LanguageLineSize 56     //语言包总行数
+#define LanguageLineSize 57     //语言包总行数
+
+char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
 
 /*
  * 简介：定义联系人以及通讯录结构体
@@ -49,9 +51,9 @@ typedef struct
 }Opt;       //CLI结构体
 
 Opt optList[CmdSize] = {
-    {"add","-a","[add | -a] <name>\nCreate a new contact\n",3,1},
+    {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,1},
     {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,7},
-    {"help","-h","[help | -h] <option>\nDisplay all help,when option is null\n",3,9},
+    {"help","-h","[help | -h] <option>\nDisplay all help when option is null or <option> help\n",3,9},
     {"help","-h","[help | -h]\nDisplay all help\n",2,9},
     {"find","-f","[find | -f] <by element> <value>\nFind the element of the value\n[by element | name | address]\n",4,4},
     {"share","-s","[share | -s] <name>\nShare contact with card\n",3,5},
@@ -60,8 +62,6 @@ Opt optList[CmdSize] = {
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",4,2},
     {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,3}
 };      //CLI操作数据
-
-char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
 
 /*
  * 简介：加载语言包
@@ -113,7 +113,7 @@ int GetOpt(int argc,char *argv[])
             return 0;
         }
     }
-    printf("%s",language[0]); //"错误命令！！！\n"
+    printf("%s\n",language[0]); //"错误命令！！！\n"
     return 0;
 }
 
@@ -130,23 +130,29 @@ int AddPerson(PersonList *PersonList,int argc,char *argv[])
     if (argc == optList[0].countArgument)
     {
         strcpy(PersonList->person[PersonList->lenght].name,argv[2]);
+        PersonList->person[PersonList->lenght].sex = toupper(argv[3][0]);
+        strcpy(PersonList->person[PersonList->lenght].phoneNumber,argv[4]);
+        strcpy(PersonList->person[PersonList->lenght].email,argv[5]);
+        PersonList->person[PersonList->lenght].postCode =  atoi(argv[6]);
+        strcpy(PersonList->person[PersonList->lenght].address,argv[7]);
+        PersonList->person[PersonList->lenght].like = (tolower(argv[8][0]) == 'y') ? 1 : 0 ;
     }else{
         printf("%s",language[1]);   //"请输入添加联系人姓名："
         scanf("%s",PersonList->person[PersonList->lenght].name);
+        printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[3]);    //"请输入" "的性别(M/W)："
+        scanf(" %c",&PersonList->person[PersonList->lenght].sex);
+        printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[4]);     //"请输入" "的电话号码："
+        scanf(" %s",PersonList->person[PersonList->lenght].phoneNumber);
+        printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[5]);     //"请输入" "的邮箱地址："
+        scanf(" %s",PersonList->person[PersonList->lenght].email);
+        printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[6]);     //"请输入" "的邮编："
+        scanf(" %d",&PersonList->person[PersonList->lenght].postCode);
+        printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[7]);     //"请输入" "的地址："
+        scanf(" %s",PersonList->person[PersonList->lenght].address);
+        printf("%s%s%s",language[8],PersonList->person[PersonList->lenght].name,language[9]);     //"是否把" "设为特别关心(Y/n)："
+        scanf(" %c",&input);
+        PersonList->person[PersonList->lenght].like = (tolower(input) == 'y') ? 1 : 0;      //1表示特别关心，0反之
     }
-    printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[3]);    //"请输入" "的性别(M/W)："
-    scanf(" %c",&PersonList->person[PersonList->lenght].sex);
-    printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[4]);     //"请输入" "的电话号码："
-    scanf(" %s",PersonList->person[PersonList->lenght].phoneNumber);
-    printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[5]);     //"请输入" "的邮箱地址："
-    scanf(" %s",PersonList->person[PersonList->lenght].email);
-    printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[6]);     //"请输入" "的邮编："
-    scanf(" %d",&PersonList->person[PersonList->lenght].postCode);
-    printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[7]);     //"请输入" "的地址："
-    scanf(" %s",PersonList->person[PersonList->lenght].address);
-    printf("%s%s%s",language[8],PersonList->person[PersonList->lenght].name,language[9]);     //"是否把" "设为特别关心(Y/n)："
-    scanf(" %c",&input);
-    PersonList->person[PersonList->lenght].like = (tolower(input) == 'y') ? 1 : 0;      //1表示特别关心，0反之
     PersonList->lenght++;
     return 0;
 }
@@ -594,7 +600,7 @@ int Setting(char systemLanguage[10])
     {
         (!strcmp(systemLanguage,"CN.txt")) ? strcpy(systemLanguage,"EN.txt") : strcpy(systemLanguage,"CN.txt");
         loadingLanguage(systemLanguage);
-        printf("%s",language[47]);  //"更改成功"
+        printf("%s\n",language[47]);  //"更改成功"
         return 0;
     }else{
         DisplayDevelopers();
@@ -684,8 +690,10 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
                 break;
         }
         if (argc >= 2) break;
-        system("pause");
-        system("cls");
+        printf("%s",language[57]);      //"敲击任意键继续……"
+        getchar();
+        getchar();      //两个 getchar() 为了避免出现吃回车的现象
+        printf("\x1b[H\x1b[2J");        //替换 system("clear") 避免在Linux中无法正常运行
     }
     return 0;
 }
