@@ -565,16 +565,16 @@ int ReadPerson(PersonList *PersonList,char systemLanguage[10])
 
 void DisplayDevelopers()
 {
-    system("cls");
+    printf("\x1b[H\x1b[2J");
     printf("MAIN PROGRAME\n");
     printf("---------------------\n");
-    printf("ZHENGTINGFEI\n\n");
+    printf("ZHENG TING FEI\n\n");
     printf("OTHER PROGRAME\n");
     printf("---------------------\n");
-    printf("LIUSILI\tZHUTIANWEN\n\n");
+    printf("LIU SI LI\nZHU TIAN WEN\n\n");
     printf("TRANSLATION\n");
     printf("---------------------\n");
-    printf("PENGYUTING\n");
+    printf("EN: PENG YU TING\n");
 }
 
 /*
