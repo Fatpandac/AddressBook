@@ -70,12 +70,12 @@ Opt optList[CmdSize] = {
  *
  */
 
-int loadingLanguage(char systemLanguage[10])
+int LoadingLanguage(char systemLanguage[10])
 {
     FILE *langFile = fopen(systemLanguage,"r");
     if (langFile == NULL)
     {
-        printf("%s\n","读取失败");
+        printf("%s\n",(!strcmp(systemLanguage,"CN.txt") ? "读取失败" : "Read failure"));
         return 0;
     }
     for (int i = 0;i <= LanguageLineSize;i++)
@@ -194,25 +194,27 @@ int FindPerson(PersonList *PersonList,int argc,char *argv[])
                ,language[11]
                ,language[12]);    //"[1] 名字查找\n" "[2] 地址查找\n" "请输入相应查找方式序号："
         scanf("%d",&findElementKey);
+        findElementKey--;       //转换查询地址为实际物理地址
         printf("%s",language[13]);  //"请输入查找的内容："
         scanf("%s",findValue);
         for (int i = 0;i < PersonList->lenght;i++)
         {
-           if (findElementKey-1 == 0)
-           {
-               if (!strcmp(PersonList->person[i].name,findValue))
-               {
+            if (findElementKey == 0)
+            {
+                if (!strcmp(PersonList->person[i].name,findValue))
+                {
                     return i;
-               }
-           }else if (findElementKey-1 == 1){
+                }
+            }else if (findElementKey == 1){
                 if (!strcmp(PersonList->person[i].address,findValue))
                 {
                     return i;
                 }
-           }
+            }
         }
     }
-    return -1;
+    printf("%s\n",language[42]);
+    return -2;
 }
 
 /*
@@ -370,8 +372,8 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
  * 简介：分享相应联系人联系卡片
  * 作者：Fatpandac
  * 时间：2021.03.24
- *
  */
+
 int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[10])
 {
     char shareName[10];
@@ -430,13 +432,16 @@ int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[
  * 简介：输出联系人信息
  * 作者：Fatpandac
  * 时间：2021.03.22
- *
  */
+
 int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        //key 用于保存指定输出地址，为-1时全输出
 {
-    printf("%-13s%-8s%-15s%-24s%-10s%-22s%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
-    if (key == -1)
+    if (key == -2)      //key 为 -2、-1、其他 时分别表示为 不输出、全输出、输出对应
     {
+        return 0;
+    }
+    printf("%-13s%-8s%-15s%-24s%-10s%-22s%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
+    if (key == -1){
         for (int i = 0;i < PersonList.lenght;i++)
         {
             if (!strcmp(systemLanguage,"CN.txt"))
@@ -466,7 +471,6 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
  * 简介：输出CLI的操作指南
  * 作者：Fatpandac
  * 时间：2021.03.20
- *
  */
 
 void PrintHelp(int argc,char *argv[])
@@ -599,7 +603,7 @@ int Setting(char systemLanguage[10])
     if (choose == 1)
     {
         (!strcmp(systemLanguage,"CN.txt")) ? strcpy(systemLanguage,"EN.txt") : strcpy(systemLanguage,"CN.txt");
-        loadingLanguage(systemLanguage);
+        LoadingLanguage(systemLanguage);
         printf("%s\n",language[47]);  //"更改成功"
         return 0;
     }else{
@@ -639,7 +643,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
     char systemLanguage[10];            //用于存储程序语言设置
     strcpy(systemLanguage,"CN.txt");    //初始化默认为中文
     ReadPerson(&PersonList,systemLanguage);     //读取通信录数据
-    loadingLanguage(systemLanguage);    //加载语言包
+    LoadingLanguage(systemLanguage);    //加载语言包
     while(Ture)
     {
         int opt;                        //每次循环初始化,用于存储操作序号
