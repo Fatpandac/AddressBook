@@ -750,12 +750,13 @@ int GetSelectLanguage(char systemLanguage[10])
         {
             continue;
         }else if(ptr->d_type == 8){
-            strcat(languageDirName[languageDirNumber++],ptr->d_name);
+            strcpy(languageDirName[languageDirNumber++],ptr->d_name);
         }else{
             continue;
         }
     }
     closedir(dir);
+    opendir("..");
 #endif
 #ifdef WIN32
     struct _finddata_t file;
