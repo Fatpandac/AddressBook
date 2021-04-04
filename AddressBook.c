@@ -14,6 +14,7 @@
 
 #define Clear() printf("\x1b[H\x1b[2J");      //清除屏幕 替换 system("clear") 避免在Linux中无法正常运行
 
+#define Success() printf("%s\n",language[47]); 
 /*
  * 简介：定义联系人以及通讯录结构体
  * 作者：Fatpandac
@@ -181,6 +182,7 @@ int AddPerson(PersonList *PersonList,int argc,char *argv[])
             }
             printf("%s\n",language[28]);
         }
+        Success();
     }
     PersonList->lenght++;
     return 0;
@@ -362,6 +364,7 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
         default:
             printf("%s\n",language[30]);    //"更改失败！！！"
     }
+    if (argc != optList[7].countArgument && argc != optList[8].countArgument) Success();    //CLI 操作不反馈
     return 0;
 }
 
@@ -391,6 +394,7 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
                 PersonList->person[j] = PersonList->person[j+1];
             }
             PersonList->lenght--;
+            Success();
         }else if (i+1 == PersonList->lenght){
             printf("%s\n",language[42]);
             break;
@@ -539,6 +543,7 @@ void PrintHelp(int argc,char *argv[])
 int ResetPerson(PersonList *PersonList)
 {
     PersonList->lenght = 0;
+    Success();
     return 0;
 }
 
@@ -678,7 +683,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
     while(Ture)
     {
         int opt;                        //每次循环初始化,用于存储操作序号
-        if (argc >= 2)
+        if (argc >= 2)                  //当 argc 大于等于二时说明是 CLI 操作
         {
             opt = GetOpt(argc,argv);
         }else{
