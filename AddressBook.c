@@ -86,17 +86,10 @@ static Opt optList[CmdSize] = {
 int LoadingLanguage(char systemLanguage[10])
 {
     char languageDirPath[50];
-#ifdef linux
-    strcpy(languageDirPath,languageDirBase);
-    strcat(languageDirPath,"/");
-    strcat(languageDirPath,systemLanguage);
-#endif
-#ifdef WIN32
     strcpy(languageDirPath,"./");
     strcat(languageDirPath,languageDirBase);
     strcat(languageDirPath,"/");
     strcat(languageDirPath,systemLanguage);
-#endif
     FILE *langFile = fopen(languageDirPath,"r");
     if (langFile == NULL)
     {
