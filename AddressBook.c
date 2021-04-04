@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#ifdef linux
+#include <dirent.h>
+#include <unistd.h>
+#endif
+#ifdef WIN32
+#include <dirent.h>
+#include <io.h>
+#endif              //在 Linux 和 Windows 不同系统环境下预处理引用不同的库
 
 #define Ture 1
 #define MaxSize 100     //通讯录数组长度
@@ -53,8 +61,8 @@ typedef struct
     int code;
 }Opt;       //CLI结构体
 
-
-static char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
+char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
+char languageDirBase[] = "language";      //语言包存放地址
 
 static Opt optList[CmdSize] = {
     {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,1},
@@ -77,15 +85,28 @@ static Opt optList[CmdSize] = {
 
 int LoadingLanguage(char systemLanguage[10])
 {
-    FILE *langFile = fopen(systemLanguage,"r");
+    char languageDirPath[50];
+#ifdef linux
+    strcpy(languageDirPath,languageDirBase);
+    strcat(languageDirPath,"/");
+    strcat(languageDirPath,systemLanguage);
+#endif
+#ifdef WIN32
+    strcpy(languageDirPath,"./");
+    strcat(languageDirPath,languageDirBase);
+    strcat(languageDirPath,"/");
+    strcat(languageDirPath,systemLanguage);
+#endif
+    FILE *langFile = fopen(languageDirPath,"r");
     if (langFile == NULL)
     {
-        printf("%s\n",(!strcmp(systemLanguage,"CN.txt") ? "读取失败" : "Read failure"));
+        printf("%s\n","Read failure");
+        fclose(langFile);
         return 0;
     }
     for (int i = 0;i <= LanguageLineSize;i++)
     {
-        fscanf(langFile,"%[^\n]\n",language[i]);
+        fscanf(langFile,"%[^\n]\n",language[i]);        //读取一整句话
     }
     fclose(langFile);
     return 0;
@@ -359,6 +380,7 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
             {
                 strcpy(chgName,argv[2]);
                 chgIndex = i;
+                if (!PersonList->lenght) printf("%s\n",language[58]);
                 for (int i = 0;i < 7;i++)
                 {
                     if (!strcmp(elementlist[i],argv[3]))
@@ -393,6 +415,7 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
     }else{
         printf("%s",language[18]);  //"请输入要修改的人名："
         scanf("%s",chgName);
+        if (!PersonList->lenght) printf("%s\n",language[58]);
         for (int i = 0;i < PersonList->lenght;i++)
         {
             if (!strcmp(PersonList->person[i].name,chgName))
@@ -650,8 +673,7 @@ int SavePerson(PersonList PersonList,char systemLanguage[10])
         printf("%s\n",language[43]);    //"写入失败"
         return 0;
     }
-    fprintf(savePerson,"系统语言为%s\n",systemLanguage);
-    fprintf(savePerson,"共有%d位联系人\n",PersonList.lenght);
+    fprintf(savePerson,"%s\n%d\n",systemLanguage,PersonList.lenght);
     for (int i = 0;i < PersonList.lenght;i++)
     {
         fprintf(savePerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address,PersonList.person[i].like);
@@ -674,8 +696,7 @@ int ReadPerson(PersonList *PersonList,char systemLanguage[10])
         printf("%s\n",language[44]);    //"读取失败"
         return 0;
     }
-    fscanf(readPerson,"系统语言为%s\n",systemLanguage);
-    fscanf(readPerson,"共有%d位联系人\n",&PersonList->lenght);
+    fscanf(readPerson,"%s\n%d\n",systemLanguage,&PersonList->lenght);
     for (int i = 0;i < PersonList->lenght;i++)
     {
         fscanf(readPerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList->person[i].name,&PersonList->person[i].sex,PersonList->person[i].phoneNumber,PersonList->person[i].email,&PersonList->person[i].postCode,PersonList->person[i].address,&PersonList->person[i].like);
@@ -701,7 +722,65 @@ void DisplayDevelopers()
     printf("Liu SiLi\nZhu TianWen\n\n");
     printf("TRANSLATION\n");
     printf("---------------------\n");
-    printf("EN: Peng YuTing\n");
+    printf("EN: Peng YuTing\n\n");
+    printf("VERSION: 0.1.8\n");
+}
+
+/*
+ * 简介：读取 language 文件夹下的语言包，并进行系统语言选择
+ * 作者：Fatpandac
+ * 时间：2021.04.04
+ */
+
+int GetSelectLanguage(char systemLanguage[10])
+{
+    char languageDirName[20][10];                //存储 language 文件夹下文件名称
+    int languageDirNumber = 0;                   //存储 language 文件夹下文件个数
+#ifdef linux
+    DIR *dir;
+    struct dirent *ptr;
+    if ((dir=opendir(languageDirBase)) == NULL)
+    {
+        perror("Open dir error...");
+        return 0;
+    }
+    while ((ptr = readdir(dir)) != NULL)
+    {
+        if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)
+        {
+            continue;
+        }else if(ptr->d_type == 8){
+            strcat(languageDirName[languageDirNumber++],ptr->d_name);
+        }else{
+            continue;
+        }
+    }
+    closedir(dir);
+#endif
+#ifdef WIN32
+    struct _finddata_t file;
+    intptr_t hFile;
+    if (_chdir(languageDirBase))
+    {
+        printf("Open dir error...");
+        return 0;
+    }
+    hFile = _findfirst("*.txt",&file);
+    do{
+        strcpy(languageDirName[languageDirNumber++],file.name);
+    }while (_findnext(hFile,&file) == 0);
+    _findclose(hFile);
+    _chdir("..");       //退回到初始的目录中
+#endif
+    for (int i = 0;i < languageDirNumber;i++)
+    {
+        printf("[%d] %s\n",i+1,languageDirName[i]);   
+    }
+    int selectIndex = 0;                             //选择的语言序号
+    printf("%s",language[27]);      //"请输入序号："
+    scanf("%d",&selectIndex);
+    strcpy(systemLanguage,languageDirName[selectIndex-1]);
+    return 0;
 }
 
 /*
@@ -709,6 +788,7 @@ void DisplayDevelopers()
  * 作者：Fatpandac
  * 时间：2020.03.26
  */
+
 int Setting(char systemLanguage[10])
 {
     int choose;
@@ -724,7 +804,7 @@ int Setting(char systemLanguage[10])
     }
     if (choose == 1)
     {
-        (!strcmp(systemLanguage,"CN.txt")) ? strcpy(systemLanguage,"EN.txt") : strcpy(systemLanguage,"CN.txt");
+        GetSelectLanguage(systemLanguage);
         LoadingLanguage(systemLanguage);
         printf("%s\n",language[47]);  //"更改成功"
         return 0;
