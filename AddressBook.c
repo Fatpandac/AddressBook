@@ -323,8 +323,10 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
                    ,language[23]
                    ,language[24]);    //"[1] 修改联系人姓名\n" "[2] 修改联系人性别\n" "[3] 修改联系人电话\n" "[4] 修改联系人邮箱\n" "[5] 修改联系人邮编\n" "[6] 修改联系人地址\n"
             printf("%s\n",(PersonList->person[chgIndex].like == 1) ? language[25] : language[26] );     //"[7] 修改为不关注" "[7] 修改为关注"
+            printf("%s\n",language[56]);
             printf("%s",language[27]);  //"请输入相应序号："
             scanf("%d",&chgElemnt);
+            if (!chgElemnt) return 0;   //退出修改
             if (chgElemnt > 0 && chgElemnt <= 7) break;//判断是否输入错误
             printf("%s\n",language[28]);    //"输入错误，请重新输入\n"
         }
@@ -598,7 +600,7 @@ int ReadPerson(PersonList *PersonList,char systemLanguage[10])
 
 void DisplayDevelopers()
 {
-    printf("\x1b[H\x1b[2J");        //清除屏幕
+    Clear();
     printf("MAIN PROGRAME\n");
     printf("---------------------\n");
     printf("Zheng TingFei\n\n");
