@@ -56,3 +56,5 @@ Successfully modified
 [8] Setting
 [0] exit
 Press any key to continue...
+No data
+Please enter the search content (start with "/" for fuzzy search):

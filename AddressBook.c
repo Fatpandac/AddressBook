@@ -6,7 +6,7 @@
 #define Ture 1
 #define MaxSize 100     //通讯录数组长度
 #define CmdSize 10       //命令操数组长度
-#define LanguageLineSize 57     //语言包总行数
+#define LanguageLineSize 59     //语言包总行数
 
 #define Pasue() printf("%s",language[57]);\
                 getchar();\
@@ -19,7 +19,6 @@
  * 简介：定义联系人以及通讯录结构体
  * 作者：Fatpandac
  * 时间：2020.03.26
- *
  */
 
 typedef struct
@@ -43,7 +42,6 @@ typedef struct
  * 简介：定义CLI结构体，并保存操作数据
  * 作者：Fatpandac
  * 时间：2021.03.19
- *
  */
 
 typedef struct
@@ -63,7 +61,7 @@ static Opt optList[CmdSize] = {
     {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,7},
     {"help","-h","[help | -h] <option>\nDisplay all help when option is null or <option> help\n",3,9},
     {"help","-h","[help | -h]\nDisplay all help\n",2,9},
-    {"find","-f","[find | -f] <by element> <value>\nFind the element of the value\n[by element | name | address]\n",4,4},
+    {"find","-f","[find | -f] <by element> <value>\nFind the element of the value,start with \"/\" for fuzzy search\n[by element | name | address]\n",4,4},
     {"share","-s","[share | -s] <name>\nShare contact with card\n",3,5},
     {"reset","","[reset]\nReset you AddressBook\n",2,6},
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",5,2},
@@ -75,7 +73,6 @@ static Opt optList[CmdSize] = {
  * 简介：加载语言包
  * 作者：Fatpandac
  * 时间：2021.03.26
- *
  */
 
 int LoadingLanguage(char systemLanguage[10])
@@ -98,7 +95,6 @@ int LoadingLanguage(char systemLanguage[10])
  * 简介：用于判断CLI并返回相应操作函数序号
  * 作者：Fatpandac
  * 时间：2021.03.20
- *
  */
 
 int GetOpt(int argc,char *argv[])
@@ -129,7 +125,6 @@ int GetOpt(int argc,char *argv[])
  * 简介：添加联系人
  * 作者：Fatpandac
  * 时间：2021.03.21
- *
  */
 
 int AddPerson(PersonList *PersonList,int argc,char *argv[])
@@ -188,34 +183,105 @@ int AddPerson(PersonList *PersonList,int argc,char *argv[])
     return 0;
 }
 
+
+
+/*
+ * 简介：模糊查找
+ * 作者：Fatpandac
+ * 时间：2021.04.04
+ */
+
+int fuzzyFind(char cmpValue[20],char findValue[20])
+{
+    int i = 0,j = 0;
+    while (cmpValue[i] != '\0')
+    {
+        if (cmpValue[i] == findValue[j])
+        {
+            i++;
+            j++;
+        }else{
+            i = i - j + 1;
+            j = 0;
+        }
+        if (findValue[j] == '\0') return 1;
+    }
+    return 0;
+}
+
+/*
+ * 简介：输出模糊查找结果
+ * 作者：Fatpandac
+ * 时间：2021.04.04
+ */
+void DisplayFuzzyPerson(PersonList *PersonList,char systemLanguage[10],int findFuzzyIndex[MaxSize],int findFuzzyIndexLenght)
+{
+    printf("%-13s%-8s%-15s%-24s%-10s%-22s%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
+    for (int i = 0;i < findFuzzyIndexLenght;i++)
+    {
+        if (!strcmp(systemLanguage,"CN.txt"))
+            {
+                printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList->person[findFuzzyIndex[i]].name,PersonList->person[findFuzzyIndex[i]].sex,PersonList->person[findFuzzyIndex[i]].phoneNumber,PersonList->person[findFuzzyIndex[i]].email,PersonList->person[findFuzzyIndex[i]].postCode,PersonList->person[findFuzzyIndex[i]].address);
+                printf("%4s\n",(PersonList->person[findFuzzyIndex[i]].like == 1) ? language[40]:language[41]);   //"是" "否"
+            }else{
+                printf("%-13s%-8c%-15s%-24s%-10d%-22s",PersonList->person[findFuzzyIndex[i]].name,PersonList->person[findFuzzyIndex[i]].sex,PersonList->person[findFuzzyIndex[i]].phoneNumber,PersonList->person[findFuzzyIndex[i]].email,PersonList->person[findFuzzyIndex[i]].postCode,PersonList->person[findFuzzyIndex[i]].address);
+                printf("%4s\n",(PersonList->person[findFuzzyIndex[i]].like == 1) ? language[40]:language[41]);   //"是" "否"
+            }
+    }
+}
+
 /*
  * 简介：用于查找相应元素对应值并返回物理地址
  * 作者：Fatpandac
  * 时间：2020.03.22
- *
  */
 
-int FindPerson(PersonList *PersonList,int argc,char *argv[])
+int FindPerson(PersonList *PersonList,char systemLanguage[10],int argc,char *argv[])
 {
     char findElement[10],findValue[20];
     int findElementKey;
+    int findFuzzyIndex[MaxSize];     //保存模糊查找结果 index 数组
+    int findFuzzyIndexLenght = 0;         //记录 findFuzzyIndex 长度
     if (argc == optList[4].countArgument)
     {
         strcpy(findElement,argv[2]);
         strcpy(findValue,argv[3]);
-        for (int i = 0;i < PersonList->lenght;i++)
-        {
-            if (!strcmp(findElement,"name"))
+        if (findValue[0] == '/'){
+            strncpy(findValue,findValue+1,strlen(findValue));        //消除模糊匹配区别符
+            for (int j = 0,k = 0;j < PersonList->lenght;j++)
             {
-                if (!strcmp(PersonList->person[i].name,findValue))
-                {
-                    return i;
+                if (!strcmp(findElement,"name"))
+                {   
+                    if (fuzzyFind(PersonList->person[j].name,findValue))
+                    {
+                        findFuzzyIndex[k++] = j;
+                        findFuzzyIndexLenght++;
+                    }
+                    
+                }else if (!strcmp(findElement,"address")){
+                    if (fuzzyFind(PersonList->person[j].address,findValue))
+                    {
+                        findFuzzyIndex[k++] = j;
+                        findFuzzyIndexLenght++;
+                    }
                 }
-            }else if (!strcmp(findElement,"address"))
+            }
+            (findFuzzyIndexLenght == 0) ? printf("%s\n",language[42]) : DisplayFuzzyPerson(PersonList,systemLanguage,findFuzzyIndex,findFuzzyIndexLenght);
+            return -2;
+        }else{
+            for (int i = 0;i < PersonList->lenght;i++)
             {
-                if (!strcmp(PersonList->person[i].name,findValue))
+                if (!strcmp(findElement,"name"))
                 {
-                    return i;
+                    if (!strcmp(PersonList->person[i].name,findValue))
+                    {
+                        return i;
+                    }
+                }else if (!strcmp(findElement,"address")){
+                    if (!strcmp(PersonList->person[i].name,findValue))
+                    {
+                        return i;
+                    }
                 }
             }
         }
@@ -226,20 +292,44 @@ int FindPerson(PersonList *PersonList,int argc,char *argv[])
                ,language[12]);    //"[1] 名字查找\n" "[2] 地址查找\n" "请输入相应查找方式序号："
         scanf("%d",&findElementKey);
         findElementKey--;       //转换查询地址为实际物理地址
-        printf("%s",language[13]);  //"请输入查找的内容："
+        printf("%s\n",language[59]);  //"请输入查找的内容(以“/”开始进行模糊查找)："
         scanf("%s",findValue);
-        for (int i = 0;i < PersonList->lenght;i++)
-        {
-            if (findElementKey == 0)
+        if (findValue[0] == '/'){
+            strncpy(findValue,findValue+1,strlen(findValue));        //消除模糊匹配区别符
+            for (int j = 0,k = 0;j < PersonList->lenght;j++)
             {
-                if (!strcmp(PersonList->person[i].name,findValue))
-                {
-                    return i;
+                if (findElementKey == 0)
+                {   
+                    if (fuzzyFind(PersonList->person[j].name,findValue))
+                    {
+                        findFuzzyIndex[k++] = j;
+                        findFuzzyIndexLenght++;
+                    }
+                    
+                }else if (findElementKey == 1){
+                    if (fuzzyFind(PersonList->person[j].address,findValue))
+                    {
+                        findFuzzyIndex[k++] = j;
+                        findFuzzyIndexLenght++;
+                    }
                 }
-            }else if (findElementKey == 1){
-                if (!strcmp(PersonList->person[i].address,findValue))
+            }
+            (findFuzzyIndexLenght == 0) ? printf("%s\n",language[42]) : DisplayFuzzyPerson(PersonList,systemLanguage,findFuzzyIndex,findFuzzyIndexLenght);
+            return -2;
+        }else{
+            for (int i = 0;i < PersonList->lenght;i++)
+            {
+                if (findElementKey == 0)
                 {
-                    return i;
+                    if (!strcmp(PersonList->person[i].name,findValue))
+                    {
+                        return i;
+                    }
+                }else if (findElementKey == 1){
+                    if (!strcmp(PersonList->person[i].address,findValue))
+                    {
+                        return i;
+                    }
                 }
             }
         }
@@ -252,7 +342,6 @@ int FindPerson(PersonList *PersonList,int argc,char *argv[])
  * 简介：修改联系人
  * 作者：Fatpandac
  * 时间：2021.03.23
- *
  */
 
 int ChangePerson(PersonList *PersonList,int argc,char *argv[])
@@ -372,7 +461,6 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
  * 简介：删除联系人
  * 作者：Fatpandac
  * 时间：2021.03.22
- *
  */
 
 int RemovePerson(PersonList *PersonList,int argc,char *argv[])
@@ -471,10 +559,12 @@ int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[
 
 int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        //key 用于保存指定输出地址，为-1时全输出
 {
-    if (key == -2)      //key 为 -2、-1、其他 时分别表示为 不输出、全输出、输出对应
+    if (PersonList.lenght <= 0 && key != -2) 
     {
+        printf("%s\n",language[58]);
         return 0;
-    }
+    }                              //在没有数据的时候输出
+    if (key == -2) return 0;      //key 为 -2、-1、其他 时分别表示为 不输出、全输出、输出对应
     printf("%-13s%-8s%-15s%-24s%-10s%-22s%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     if (key == -1){
         for (int i = 0;i < PersonList.lenght;i++)
@@ -538,7 +628,6 @@ void PrintHelp(int argc,char *argv[])
  * 简介：重置通讯录
  * 作者：Fatpandac
  * 时间：2021.03.20
- *
  */
 int ResetPerson(PersonList *PersonList)
 {
@@ -551,7 +640,6 @@ int ResetPerson(PersonList *PersonList)
  * 简介：将数据保存到文件中
  * 作者：Fatpandac
  * 时间：2021.03.25
- *
  */
 
 int SavePerson(PersonList PersonList,char systemLanguage[10])
@@ -600,7 +688,6 @@ int ReadPerson(PersonList *PersonList,char systemLanguage[10])
  * 简介：输出开发人员
  * 作者：Fatpandac
  * 时间：2021.03.26
- *
  */
 
 void DisplayDevelopers()
@@ -621,7 +708,6 @@ void DisplayDevelopers()
  * 简介：设置程序语言以及显示开发人员操作
  * 作者：Fatpandac
  * 时间：2020.03.26
- *
  */
 int Setting(char systemLanguage[10])
 {
@@ -652,7 +738,6 @@ int Setting(char systemLanguage[10])
  * 简介：输出操作目录
  * 作者：Fatpandac
  * 时间：2021.03.20
- *
  */
 
 int menu()
@@ -704,7 +789,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
                 SavePerson(PersonList,systemLanguage);
                 break;
             case 4:
-                DisplayPerson(PersonList,FindPerson(&PersonList,argc,argv),systemLanguage);
+                DisplayPerson(PersonList,FindPerson(&PersonList,systemLanguage,argc,argv),systemLanguage);
                 break;
             case 5:
                 SharePerson(PersonList,argc,argv,systemLanguage);
@@ -726,7 +811,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
             case 0:
                 exit(0);
             default:
-                printf("Err");
+                printf("Error\n");
                 break;
         }
         if (argc >= 2) break;
