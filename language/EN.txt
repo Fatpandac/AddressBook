@@ -52,7 +52,7 @@ Successfully modified
 [4] Find contact information
 [5] Share contacts
 [6] Reset address book
-[7] display address book list
+[7] Display address book
 [8] Setting
 [0] exit
 Press any key to continue...

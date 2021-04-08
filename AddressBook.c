@@ -20,7 +20,12 @@
                 getchar();\
                 getchar();      //"敲击任意键继续…" 两个 getchar() 为了防止吃回车现象出现
 
-#define Clear() printf("\x1b[H\x1b[2J");      //清除屏幕 替换 system("clear") 避免在Linux中无法正常运行
+#ifdef linux
+#define Clear() system("clear");
+#endif 
+#ifdef WIN32
+#define Clear() system("cls");      //清除屏幕 windows 中调用 system("cls") Linux 中调用 system("clear")
+#endif
 
 #define Success() printf("%s\n",language[47]); 
 /*
@@ -64,17 +69,17 @@ typedef struct
 char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
 char languageDirBase[] = "language";      //语言包存放地址
 
-static Opt optList[CmdSize] = {
-    {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,1},
-    {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,7},
+static Opt optList[CmdSize] = {    
     {"help","-h","[help | -h] <option>\nDisplay all help when option is null or <option> help\n",3,9},
     {"help","-h","[help | -h]\nDisplay all help\n",2,9},
+    {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,1},
+    {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,7},
     {"find","-f","[find | -f] <by element> <value>\nFind the element of the value,start with \"/\" for fuzzy search\n[by element | name | address]\n",4,4},
+    {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,3},
     {"share","-s","[share | -s] <name>\nShare contact with card\n",3,5},
-    {"reset","","[reset]\nReset you AddressBook\n",2,6},
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",5,2},
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",4,2},
-    {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,3}
+    {"reset","","[reset]\nReset you AddressBook\n",2,6}
 };      //CLI操作数据
 
 /*
@@ -727,7 +732,7 @@ void DisplayDevelopers()
 
 int GetSelectLanguage(char systemLanguage[10])
 {
-    char languageDirName[20][10];                //存储 language 文件夹下文件名称
+    char languageDirNameList[20][10];                //存储 language 文件夹下文件名称
     int languageDirNumber = 0;                   //存储 language 文件夹下文件个数
 #ifdef linux
     DIR *dir;
@@ -743,13 +748,13 @@ int GetSelectLanguage(char systemLanguage[10])
         {
             continue;
         }else if(ptr->d_type == 8){
-            strcpy(languageDirName[languageDirNumber++],ptr->d_name);
+            strcpy(languageDirNameList[languageDirNumber++],ptr->d_name);
         }else{
             continue;
         }
     }
     closedir(dir);
-    opendir("..");
+    opendir("..");      //退回到初始的目录中
 #endif
 #ifdef WIN32
     struct _finddata_t file;
@@ -761,19 +766,25 @@ int GetSelectLanguage(char systemLanguage[10])
     }
     hFile = _findfirst("*.txt",&file);
     do{
-        strcpy(languageDirName[languageDirNumber++],file.name);
+        strcpy(languageDirNameList[languageDirNumber++],file.name);
     }while (_findnext(hFile,&file) == 0);
     _findclose(hFile);
     _chdir("..");       //退回到初始的目录中
 #endif
     for (int i = 0;i < languageDirNumber;i++)
     {
-        printf("[%d] %s\n",i+1,languageDirName[i]);   
+        printf("[%d] %s\n",i+1,languageDirNameList[i]);   
     }
     int selectIndex = 0;                             //选择的语言序号
-    printf("%s",language[27]);      //"请输入序号："
-    scanf("%d",&selectIndex);
-    strcpy(systemLanguage,languageDirName[selectIndex-1]);
+    while (Ture)
+    {
+        printf("%s",language[27]);      //"请输入序号："
+        getchar();
+        selectIndex = getchar()-48;
+        if (selectIndex > 0 && selectIndex < languageDirNumber+1) break;
+        printf("%s\n",language[28]);
+    }
+    strcpy(systemLanguage,languageDirNameList[selectIndex-1]);
     return 0;
 }
 
@@ -793,7 +804,7 @@ int Setting(char systemLanguage[10])
     scanf("%d",&choose);
     if (choose != 1 && choose != 2)
     {
-        printf("%s\n",language[29]);    //"输入错误,请重新输入"
+        printf("%s\n",language[28]);    //"输入错误,请重新输入"
         return 0;
     }
     if (choose == 1)
@@ -814,7 +825,7 @@ int Setting(char systemLanguage[10])
  * 时间：2021.03.20
  */
 
-int menu()
+int Menu()
 {
     int opt;
     printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s"
@@ -846,7 +857,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
         {
             opt = GetOpt(argc,argv);
         }else{
-            opt = menu();
+            opt = Menu();
         }
         switch (opt)
         {
@@ -880,6 +891,11 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
                 SavePerson(PersonList,systemLanguage);
                 break;
             case 9:
+                if (argc < 2)
+                {
+                    printf("Error\n");
+                    break;
+                }//避免在使用非CLI时调用
                 PrintHelp(argc,argv);
                 break;
             case 0:
