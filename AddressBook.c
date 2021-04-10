@@ -11,10 +11,11 @@
 #include <io.h>
 #endif              //在 Linux 和 Windows 不同系统环境下预处理引用不同的库
 
-#define Ture 1
-#define MaxSize 100     //通讯录数组长度
-#define CmdSize 10       //命令操数组长度
-#define LanguageLineSize 59     //语言包总行数
+#define Ture               1
+#define MaxSize            100     //通讯录数组长度
+#define CmdSize            10      //命令操数组长度
+#define LanguageLineSize   60     //语言包总行数
+#define VERSION            "0.1.9"
 
 #define Pasue() printf("%s",language[57]);\
                 getchar();\
@@ -28,13 +29,24 @@
 #endif
 
 #define Success() printf("%s\n",language[47]); 
+
+//相应操作对应的序号
+#define HelpOpt 9
+#define AddOpt  1
+#define ViewOpt 7
+#define FindOpt 4
+#define RemoveOpt 3
+#define ShareOpt 5
+#define ChangeOpt 2
+#define ResetOpt 6
+
 /*
  * 简介：定义联系人以及通讯录结构体
  * 作者：Fatpandac
  * 时间：2020.03.26
  */
 
-typedef struct
+typedef struct Person
 {
     char name[10];
     char address[20];
@@ -45,7 +57,7 @@ typedef struct
     int like;
 }Person;        //联系人结构体
 
-typedef struct
+typedef struct PersonList
 {
     Person person[MaxSize];
     int lenght;
@@ -57,7 +69,7 @@ typedef struct
  * 时间：2021.03.19
  */
 
-typedef struct
+typedef struct Opt
 {
     char longOptName[10];
     char shortOptName[5];
@@ -67,19 +79,19 @@ typedef struct
 }Opt;       //CLI结构体
 
 char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
-char languageDirBase[] = "language";      //语言包存放地址
+char languageDirBase[] = "./language";      //语言包存放地址
 
 static Opt optList[CmdSize] = {    
-    {"help","-h","[help | -h] <option>\nDisplay all help when option is null or <option> help\n",3,9},
-    {"help","-h","[help | -h]\nDisplay all help\n",2,9},
-    {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,1},
-    {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,7},
-    {"find","-f","[find | -f] <by element> <value>\nFind the element of the value,start with \"/\" for fuzzy search\n[by element | name | address]\n",4,4},
-    {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,3},
-    {"share","-s","[share | -s] <name>\nShare contact with card\n",3,5},
-    {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",5,2},
-    {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",4,2},
-    {"reset","","[reset]\nReset you AddressBook\n",2,6}
+    {"help","-h","[help | -h] <option>\nDisplay all help when option is null or <option> help\n",3,HelpOpt},
+    {"help","-h","[help | -h]\nDisplay all help\n",2,HelpOpt},
+    {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,AddOpt},
+    {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,ViewOpt},
+    {"find","-f","[find | -f] <by element> <value>\nFind the element of the value,start with \"/\" for fuzzy search\n[by element | name | address]\n",4,FindOpt},
+    {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,RemoveOpt},
+    {"share","-s","[share | -s] <name>\nShare contact with card\n",3,ShareOpt},
+    {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",5,ChangeOpt},
+    {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",4,ChangeOpt},
+    {"reset","","[reset]\nReset you AddressBook\n",2,ResetOpt}
 };      //CLI操作数据
 
 /*
@@ -91,8 +103,7 @@ static Opt optList[CmdSize] = {
 int LoadingLanguage(char systemLanguage[10])
 {
     char languageDirPath[50];
-    strcpy(languageDirPath,"./");
-    strcat(languageDirPath,languageDirBase);
+    strcpy(languageDirPath,languageDirBase);
     strcat(languageDirPath,"/");
     strcat(languageDirPath,systemLanguage);
     FILE *langFile = fopen(languageDirPath,"r");
@@ -149,7 +160,7 @@ int GetOpt(int argc,char *argv[])
 int AddPerson(PersonList *PersonList,int argc,char *argv[])
 {
     char input;
-    if (argc == optList[0].countArgument)
+    if (argc == optList[2].countArgument)
     {
        if ((toupper(argv[3][0]) == 'M' || toupper(argv[3][0]) == 'W') && (tolower(argv[8][0]) == 'y' || tolower(argv[8][0]) == 'n')) //对 sex 和 like 输入进行判断是否为合法输入
        {
@@ -305,11 +316,16 @@ int FindPerson(PersonList *PersonList,char systemLanguage[10],int argc,char *arg
             }
         }
     }else{
-        printf("%s\n%s\n%s"
-               ,language[10]
-               ,language[11]
-               ,language[12]);    //"[1] 名字查找\n" "[2] 地址查找\n" "请输入相应查找方式序号："
-        scanf("%d",&findElementKey);
+        while (Ture)
+        {
+            printf("%s\n%s\n%s"
+                ,language[10]
+                ,language[11]
+                ,language[12]);    //"[1] 名字查找\n" "[2] 地址查找\n" "请输入相应查找方式序号："
+            scanf("%d",&findElementKey);
+            if (findElementKey > 0 && findElementKey <= 2) break;
+            printf("%s\n",language[28]);
+        }
         findElementKey--;       //转换查询地址为实际物理地址
         printf("%s\n",language[59]);  //"请输入查找的内容(以“/”开始进行模糊查找)："
         scanf("%s",findValue);
@@ -508,7 +524,7 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
             printf("%s\n",language[42]);
             break;
         }
-    }
+    }                   //**算法需要优化**//
     return 0;
 }
 
@@ -533,7 +549,7 @@ int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[
         if (!strcmp(PersonList.person[i].name,shareName))
         {
 
-            if (!strcmp(systemLanguage,"CN.txt"))
+            if (!strcmp(systemLanguage,"CN.txt"))           //中英文输出字符占用大小不同
             {
                 printf("%s","+-----------------------------+\n");
                 printf("|%11s:%-20s|\n",language[33],PersonList.person[i].name);    //"联系人"
@@ -721,7 +737,7 @@ void DisplayDevelopers()
     printf("TRANSLATION\n");
     printf("---------------------\n");
     printf("EN: Peng YuTing\n\n");
-    printf("VERSION: 0.1.8\n");
+    printf("VERSION:%s\n",VERSION);
 }
 
 /*
