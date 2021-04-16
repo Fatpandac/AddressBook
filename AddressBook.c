@@ -516,7 +516,7 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
         if (strcmp(PersonList->person[i].name,mvName))
         {
            strcpy (PersonList->person[removeLenght].name , PersonList->person[i].name);
-            removeLenght++;
+           removeLenght++;
         }    
     }  
      if (removeLenght == PersonList->lenght){
