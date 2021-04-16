@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <conio.h>
 #ifdef linux
 #include <dirent.h>
 #include <unistd.h>
@@ -18,8 +19,7 @@
 #define VERSION            "0.1.9"
 
 #define Pasue() printf("%s",language[57]);\
-                getchar();\
-                getchar();      //"敲击任意键继续…" 两个 getchar() 为了防止吃回车现象出现
+                getch();      //"敲击任意键继续…" 调用getch()函数
 
 #ifdef linux
 #define Clear() system("clear");
