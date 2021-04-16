@@ -503,28 +503,28 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
 int RemovePerson(PersonList *PersonList,int argc,char *argv[])
 {
     char mvName[10];        //存储被删除人姓名
+    int removeLenght = 0;      //删除后长度
     if (argc == optList[9].countArgument)
     {
         strcpy(mvName,argv[2]);
     }else{
         printf("%s",language[31]);  //"请输入被删除联系人名称："
         scanf("%s",mvName);
-    }
+    } 
     for (int i = 0;i < PersonList->lenght;i++)
     {
-        if (!strcmp(PersonList->person[i].name,mvName))
+        if (strcmp(PersonList->person[i].name,mvName))
         {
-            for (int j = i;j <= PersonList->lenght;j++)
-            {
-                PersonList->person[j] = PersonList->person[j+1];
-            }
-            PersonList->lenght--;
-            Success();
-        }else if (i+1 == PersonList->lenght){
+           strcpy (PersonList->person[removeLenght].name , PersonList->person[i].name);
+           removeLenght++;
+        }    
+    }  
+     if (removeLenght == PersonList->lenght){
             printf("%s\n",language[42]);
-            break;
-        }
-    }                   //**算法需要优化**//
+    }else{
+            PersonList->lenght = removeLenght;
+            Success();
+    }
     return 0;
 }
 
