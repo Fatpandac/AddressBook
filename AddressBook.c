@@ -557,7 +557,7 @@ int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[
                 printf("|%10s:%-20c|\n",language[34],PersonList.person[i].sex);     //"性别"
                 printf("%s","+-----------------------------+\n");
                 printf("|%10s:%-20s|\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
-                printf("%s","+----------------------1-------+\n");
+                printf("%s","+-----------------------------+\n");
                 printf("|%10s:%-20s|\n",language[36],PersonList.person[i].email);   //"电子邮箱"
                 printf("%s","+-----------------------------+\n");
                 printf("|%10s:%-20d|\n",language[37],PersonList.person[i].postCode);    //"邮编"
