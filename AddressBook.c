@@ -15,7 +15,7 @@
 #define MaxSize            100     //通讯录数组长度
 #define CmdSize            10      //命令操数组长度
 #define LanguageLineSize   60     //语言包总行数
-#define VERSION            "0.1.11"
+#define VERSION            "0.1.12"
 
 #define Pasue() printf("%s",language[57]);\
                 getchar();\
