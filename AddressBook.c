@@ -244,19 +244,13 @@ int fuzzyFind(char cmpValue[20],char findValue[20])
  * 作者：Fatpandac
  * 时间：2021.04.04
  */
-void DisplayFuzzyPerson(PersonList *PersonList,char systemLanguage[10],int findFuzzyIndex[MaxSize],int findFuzzyIndexLenght)
+void DisplayFuzzyPerson(PersonList *PersonList,int findFuzzyIndex[MaxSize],int findFuzzyIndexLenght)
 {
-    printf("%-13s%-8s%-15s%-24s%-10s%-22s%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
+    printf("%-15s\t%-10s\t%-20s\t%-20s\t%-13s\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     for (int i = 0;i < findFuzzyIndexLenght;i++)
     {
-        if (!strcmp(systemLanguage,"CN.txt"))
-            {
-                printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList->person[findFuzzyIndex[i]].name,PersonList->person[findFuzzyIndex[i]].sex,PersonList->person[findFuzzyIndex[i]].phoneNumber,PersonList->person[findFuzzyIndex[i]].email,PersonList->person[findFuzzyIndex[i]].postCode,PersonList->person[findFuzzyIndex[i]].address);
-                printf("%4s\n",(PersonList->person[findFuzzyIndex[i]].like == 1) ? language[40]:language[41]);   //"是" "否"
-            }else{
-                printf("%-13s%-8c%-15s%-24s%-10d%-22s",PersonList->person[findFuzzyIndex[i]].name,PersonList->person[findFuzzyIndex[i]].sex,PersonList->person[findFuzzyIndex[i]].phoneNumber,PersonList->person[findFuzzyIndex[i]].email,PersonList->person[findFuzzyIndex[i]].postCode,PersonList->person[findFuzzyIndex[i]].address);
-                printf("%4s\n",(PersonList->person[findFuzzyIndex[i]].like == 1) ? language[40]:language[41]);   //"是" "否"
-            }
+        printf("%-15s\t%-10c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList->person[findFuzzyIndex[i]].name,PersonList->person[findFuzzyIndex[i]].sex,PersonList->person[findFuzzyIndex[i]].phoneNumber,PersonList->person[findFuzzyIndex[i]].email,PersonList->person[findFuzzyIndex[i]].postCode,PersonList->person[findFuzzyIndex[i]].address);
+        printf("\t%s\n",(PersonList->person[findFuzzyIndex[i]].like == 1) ? language[40]:language[41]);   //"是" "否"
     }
 }
 
@@ -266,7 +260,7 @@ void DisplayFuzzyPerson(PersonList *PersonList,char systemLanguage[10],int findF
  * 时间：2020.03.22
  */
 
-int FindPerson(PersonList *PersonList,char systemLanguage[10],int argc,char *argv[])
+int FindPerson(PersonList *PersonList,int argc,char *argv[])
 {
     char findElement[10],findValue[20];
     int findElementKey;
@@ -296,7 +290,7 @@ int FindPerson(PersonList *PersonList,char systemLanguage[10],int argc,char *arg
                     }
                 }
             }
-            (findFuzzyIndexLenght == 0) ? printf("%s\n",language[42]) : DisplayFuzzyPerson(PersonList,systemLanguage,findFuzzyIndex,findFuzzyIndexLenght);
+            (findFuzzyIndexLenght == 0) ? printf("%s\n",language[42]) : DisplayFuzzyPerson(PersonList,findFuzzyIndex,findFuzzyIndexLenght);
             return -2;
         }else{
             for (int i = 0;i < PersonList->lenght;i++)
@@ -349,7 +343,7 @@ int FindPerson(PersonList *PersonList,char systemLanguage[10],int argc,char *arg
                     }
                 }
             }
-            (findFuzzyIndexLenght == 0) ? printf("%s\n",language[42]) : DisplayFuzzyPerson(PersonList,systemLanguage,findFuzzyIndex,findFuzzyIndexLenght);
+            (findFuzzyIndexLenght == 0) ? printf("%s\n",language[42]) : DisplayFuzzyPerson(PersonList,findFuzzyIndex,findFuzzyIndexLenght);
             return -2;
         }else{
             for (int i = 0;i < PersonList->lenght;i++)
@@ -582,16 +576,16 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
         return 0;
     }                              //在没有数据的时候输出
     if (key == -2) return 0;      //key 为 -2、-1、其他 时分别表示为 不输出、全输出、输出对应
-    printf("%-10s\t%-8s\t%-20s\t%-20s\t%-13s\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
+    printf("%-15s\t%-10s\t%-20s\t%-20s\t%-13d\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     if (key == -1){
         for (int i = 0;i < PersonList.lenght;i++)
         {
-            printf("%-10s\t%-8c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+            printf("%-15s\t%-10c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
             printf("\t%s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
         }
     }else{
         int i = key;
-        printf("%-20s\t%-15c\t%-20s\t%-20s\t%-20d\t%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+        printf("%-15s\t%-10c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
         printf("\t%s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
     }
     return 0;
@@ -858,7 +852,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
                 SavePerson(PersonList,systemLanguage);
                 break;
             case 4:
-                DisplayPerson(PersonList,FindPerson(&PersonList,systemLanguage,argc,argv),systemLanguage);
+                DisplayPerson(PersonList,FindPerson(&PersonList,argc,argv),systemLanguage);
                 break;
             case 5:
                 SharePerson(PersonList,argc,argv,systemLanguage);
