@@ -2,154 +2,37 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#ifdef linux
-#include <dirent.h>
-#include <unistd.h>
-#endif
-#ifdef WIN32
-#include <dirent.h>
-#include <io.h>
-#endif              //在 Linux 和 Windows 不同系统环境下预处理引用不同的库
+#include "file.h"
+#include "func.h"
+#include "language.h"
+#include "cliFunc.h"
 
-#define Ture               1
-#define MaxSize            100     //通讯录数组长度
-#define CmdSize            10      //命令操数组长度
-#define LanguageLineSize   60     //语言包总行数
 #define VERSION            "0.1.12"
 
-#define Pasue() printf("%s",language[57]);\
-                getchar();\
-                getchar();      //"敲击任意键继续…" 两个 getchar() 为了防止吃回车现象出现
-
-#ifdef linux
-#define Clear() system("clear");
-#endif 
-#ifdef WIN32
-#define Clear() system("cls");      //清除屏幕 windows 中调用 system("cls") Linux 中调用 system("clear")
-#endif
-
-#define Success() printf("%s\n",language[47]); 
-
-//相应操作对应的序号
-#define HelpOpt 9
-#define AddOpt  1
-#define ViewOpt 7
-#define FindOpt 4
-#define RemoveOpt 3
-#define ShareOpt 5
-#define ChangeOpt 2
-#define ResetOpt 6
 
 /*
- * 简介：定义联系人以及通讯录结构体
- * 作者：Fatpandac
- * 时间：2020.03.26
- */
-
-typedef struct Person
-{
-    char name[10];
-    char address[20];
-    int postCode;
-    char sex;
-    char email[20];
-    char phoneNumber[12];
-    int like;
-}Person;        //联系人结构体
-
-typedef struct PersonList
-{
-    Person person[MaxSize];
-    int lenght;
-}PersonList;
-
-/*
- * 简介：定义CLI结构体，并保存操作数据
- * 作者：Fatpandac
- * 时间：2021.03.19
- */
-
-typedef struct Opt
-{
-    char longOptName[10];
-    char shortOptName[5];
-    char optGuide[150];
-    int countArgument;
-    int code;
-}Opt;       //CLI结构体
-
-char language[LanguageLineSize][60];      //定义语言数组，用于保存对应语言包数据
-char languageDirBase[] = "./language";      //语言包存放地址
-
-static Opt optList[CmdSize] = {    
-    {"help","-h","[help | -h] <option>\nDisplay all help when option is null or <option> help\n",3,HelpOpt},
-    {"help","-h","[help | -h]\nDisplay all help\n",2,HelpOpt},
-    {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,AddOpt},
-    {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,ViewOpt},
-    {"find","-f","[find | -f] <by element> <value>\nFind the element of the value,start with \"/\" for fuzzy search\n[by element | name | address]\n",4,FindOpt},
-    {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,RemoveOpt},
-    {"share","-s","[share | -s] <name>\nShare contact with card\n",3,ShareOpt},
-    {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",5,ChangeOpt},
-    {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",4,ChangeOpt},
-    {"reset","","[reset]\nReset you AddressBook\n",2,ResetOpt}
-};      //CLI操作数据
-
-/*
- * 简介：加载语言包
- * 作者：Fatpandac
- * 时间：2021.03.26
- */
-
-int LoadingLanguage(char systemLanguage[10])
-{
-    char languageDirPath[50];
-    strcpy(languageDirPath,languageDirBase);
-    strcat(languageDirPath,"/");
-    strcat(languageDirPath,systemLanguage);
-    FILE *langFile = fopen(languageDirPath,"r");
-    if (langFile == NULL)
-    {
-        printf("%s\n","Read failure");
-        fclose(langFile);
-        return 0;
-    }
-    for (int i = 0;i <= LanguageLineSize;i++)
-    {
-        fscanf(langFile,"%[^\n]\n",language[i]);        //读取一整句话
-    }
-    fclose(langFile);
-    return 0;
-}
-
-/*
- * 简介：用于判断CLI并返回相应操作函数序号
+ * 简介：输出操作目录
  * 作者：Fatpandac
  * 时间：2021.03.20
  */
-
-int GetOpt(int argc,char *argv[])
+int Menu()
 {
-    for(int i = 0;i < CmdSize;i++)
-    {
-        if (optList[i].countArgument == argc)
-        {
-            if (!strcmp(optList[i].longOptName,argv[1]) || !strcmp(optList[i].shortOptName,argv[1]))
-            {
-                return optList[i].code;
-            }
-        }
-    }
-    for (int i = 0;i < CmdSize;i++)
-    {
-        if (!strcmp(optList[i].longOptName,argv[1]) || !strcmp(optList[i].shortOptName,argv[1]))
-        {
-            printf("%s",optList[i].optGuide);
-            return 0;
-        }
-    }
-    printf("%s\n",language[0]); //"错误命令！！！\n"
-    return 0;
+    int opt;
+    printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s"
+           ,language[48]
+           ,language[49]
+           ,language[50]
+           ,language[51]
+           ,language[52]
+           ,language[53]
+           ,language[54]
+           ,language[55]
+           ,language[56]
+           ,language[27]);    //"[1] 生成联系方式" "[2] 修改联系方式" "[3] 删除联系方式" "[4] 查找联系方式" "[5] 分享联系人  " "[6] 重置通讯录  " "[7] 显示通讯录列表" "[8] 设置" "[0] 退出        " "请输入相应序号："
+    scanf("%d",&opt);
+    return opt;
 }
+
 
 /*
  * 简介：添加联系人
@@ -177,7 +60,7 @@ int AddPerson(PersonList *PersonList,int argc,char *argv[])
     }else{
         printf("%s",language[1]);   //"请输入添加联系人姓名："
         scanf("%s",PersonList->person[PersonList->lenght].name);
-        while (Ture)
+        while (1)
         {
             printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[3]);    //"请输入" "的性别(M/W)："
             scanf(" %c",&input);
@@ -196,7 +79,7 @@ int AddPerson(PersonList *PersonList,int argc,char *argv[])
         scanf(" %d",&PersonList->person[PersonList->lenght].postCode);
         printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[7]);     //"请输入" "的地址："
         scanf(" %s",PersonList->person[PersonList->lenght].address);
-        while (Ture)
+        while (1)
         {
             printf("%s%s%s",language[8],PersonList->person[PersonList->lenght].name,language[9]);     //"是否把" "设为特别关心(Y/n)："
             scanf(" %c",&input);
@@ -212,8 +95,6 @@ int AddPerson(PersonList *PersonList,int argc,char *argv[])
     PersonList->lenght++;
     return 0;
 }
-
-
 
 /*
  * 简介：模糊查找
@@ -310,7 +191,7 @@ int FindPerson(PersonList *PersonList,int argc,char *argv[])
             }
         }
     }else{
-        while (Ture)
+        while (1)
         {
             printf("%s\n%s\n%s"
                 ,language[10]
@@ -435,7 +316,7 @@ int ChangePerson(PersonList *PersonList,int argc,char *argv[])
                 return 0;
             }
         }
-        while (Ture)
+        while (1)
         {
             printf("%s\n%s\n%s\n%s\n%s\n%s\n"
                    ,language[19]
@@ -498,7 +379,7 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[])
 {
     char mvName[10];        //存储被删除人姓名
     int removeLenght = 0;      //删除后长度
-    if (argc == optList[9].countArgument)
+    if (argc == optList[5].countArgument)
     {
         strcpy(mvName,argv[2]);
     }else{
@@ -592,38 +473,6 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
 }
 
 /*
- * 简介：输出CLI的操作指南
- * 作者：Fatpandac
- * 时间：2021.03.20
- */
-
-void PrintHelp(int argc,char *argv[])
-{
-    if (argc == 3)
-    {
-        for (int i = 0;i < CmdSize;i++)
-        {
-            if (!strcmp(optList[i].longOptName,argv[2]) || !strcmp(optList[i].shortOptName,argv[2]))
-            {
-                printf("%s\n",optList[i].optGuide);
-                break;
-            }else if (i+1 == CmdSize){
-                printf("%s\n",language[15]);
-            }
-        }
-    }else{
-        for (int i = 0;i < CmdSize;i++)
-        {
-            printf("%s\n",optList[i].optGuide);
-            if (!strcmp(optList[i].longOptName,optList[i+1].longOptName))
-            {
-                i++;
-            }
-        }
-    }
-}
-
-/*
  * 简介：重置通讯录
  * 作者：Fatpandac
  * 时间：2021.03.20
@@ -632,52 +481,6 @@ int ResetPerson(PersonList *PersonList)
 {
     PersonList->lenght = 0;
     Success();
-    return 0;
-}
-
-/*
- * 简介：将数据保存到文件中
- * 作者：Fatpandac
- * 时间：2021.03.25
- */
-
-int SavePerson(PersonList PersonList,char systemLanguage[10])
-{
-    FILE *savePerson = fopen("AddressBook.txt","wb");
-    if (savePerson == NULL)
-    {
-        printf("%s\n",language[43]);    //"写入失败"
-        return 0;
-    }
-    fprintf(savePerson,"%s\n%d\n",systemLanguage,PersonList.lenght);
-    for (int i = 0;i < PersonList.lenght;i++)
-    {
-        fprintf(savePerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address,PersonList.person[i].like);
-    }
-    fclose(savePerson);
-    return 0;
-}
-
-/*
- * 简介：读取文件获取到通讯录数据
- * 作者：Fatpandac
- * 时间：2021.03.25
- */
-
-int ReadPerson(PersonList *PersonList,char systemLanguage[10])
-{
-    FILE *readPerson = fopen("AddressBook.txt","rb");
-    if (readPerson == NULL)
-    {
-        printf("%s\n",language[44]);    //"读取失败"
-        return 0;
-    }
-    fscanf(readPerson,"%s\n%d\n",systemLanguage,&PersonList->lenght);
-    for (int i = 0;i < PersonList->lenght;i++)
-    {
-        fscanf(readPerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList->person[i].name,&PersonList->person[i].sex,PersonList->person[i].phoneNumber,PersonList->person[i].email,&PersonList->person[i].postCode,PersonList->person[i].address,&PersonList->person[i].like);
-    }
-    fclose(readPerson);
     return 0;
 }
 
@@ -700,70 +503,6 @@ void DisplayDevelopers()
     printf("---------------------\n");
     printf("EN: Peng YuTing\n\n");
     printf("VERSION:%s\n",VERSION);
-}
-
-/*
- * 简介：读取 language 文件夹下的语言包，并进行系统语言选择
- * 作者：Fatpandac
- * 时间：2021.04.04
- */
-
-int GetSelectLanguage(char systemLanguage[10])
-{
-    char languageDirNameList[20][10];                //存储 language 文件夹下文件名称
-    int languageDirNumber = 0;                   //存储 language 文件夹下文件个数
-#ifdef linux
-    DIR *dir;
-    struct dirent *ptr;
-    if ((dir=opendir(languageDirBase)) == NULL)
-    {
-        perror("Open dir error...");
-        return 0;
-    }
-    while ((ptr = readdir(dir)) != NULL)
-    {
-        if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)
-        {
-            continue;
-        }else if(ptr->d_type == 8){
-            strcpy(languageDirNameList[languageDirNumber++],ptr->d_name);
-        }else{
-            continue;
-        }
-    }
-    closedir(dir);
-    opendir("..");      //退回到初始的目录中
-#endif
-#ifdef WIN32
-    struct _finddata_t file;
-    intptr_t hFile;
-    if (_chdir(languageDirBase))
-    {
-        printf("Open dir error...");
-        return 0;
-    }
-    hFile = _findfirst("*.txt",&file);
-    do{
-        strcpy(languageDirNameList[languageDirNumber++],file.name);
-    }while (_findnext(hFile,&file) == 0);
-    _findclose(hFile);
-    _chdir("..");       //退回到初始的目录中
-#endif
-    for (int i = 0;i < languageDirNumber;i++)
-    {
-        printf("[%d] %s\n",i+1,languageDirNameList[i]);   
-    }
-    int selectIndex = 0;                             //选择的语言序号
-    while (Ture)
-    {
-        printf("%s",language[27]);      //"请输入序号："
-        getchar();
-        selectIndex = getchar()-48;
-        if (selectIndex > 0 && selectIndex < languageDirNumber+1) break;
-        printf("%s\n",language[28]);
-    }
-    strcpy(systemLanguage,languageDirNameList[selectIndex-1]);
-    return 0;
 }
 
 /*
@@ -793,98 +532,6 @@ int Setting(char systemLanguage[10])
         return 0;
     }else{
         DisplayDevelopers();
-    }
-    return 0;
-}
-
-/*
- * 简介：输出操作目录
- * 作者：Fatpandac
- * 时间：2021.03.20
- */
-
-int Menu()
-{
-    int opt;
-    printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s"
-           ,language[48]
-           ,language[49]
-           ,language[50]
-           ,language[51]
-           ,language[52]
-           ,language[53]
-           ,language[54]
-           ,language[55]
-           ,language[56]
-           ,language[27]);    //"[1] 生成联系方式" "[2] 修改联系方式" "[3] 删除联系方式" "[4] 查找联系方式" "[5] 分享联系人  " "[6] 重置通讯录  " "[7] 显示通讯录列表" "[8] 设置" "[0] 退出        " "请输入相应序号："
-    scanf("%d",&opt);
-    return opt;
-}
-
-int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入的参数
-{
-    PersonList PersonList;
-    char systemLanguage[10];            //用于存储程序语言设置
-    strcpy(systemLanguage,"CN.txt");    //初始化默认为中文
-    ReadPerson(&PersonList,systemLanguage);     //读取通信录数据
-    LoadingLanguage(systemLanguage);    //加载语言包
-    while(Ture)
-    {
-        int opt;                        //每次循环初始化,用于存储操作序号
-        if (argc >= 2)                  //当 argc 大于等于二时说明是 CLI 操作
-        {
-            opt = GetOpt(argc,argv);
-        }else{
-            opt = Menu();
-        }
-        switch (opt)
-        {
-            case 1:
-                AddPerson(&PersonList,argc,argv);
-                SavePerson(PersonList,systemLanguage);
-                break;
-            case 2:
-                ChangePerson(&PersonList,argc,argv);
-                SavePerson(PersonList,systemLanguage);
-                break;
-            case 3:
-                RemovePerson(&PersonList,argc,argv);
-                SavePerson(PersonList,systemLanguage);
-                break;
-            case 4:
-                DisplayPerson(PersonList,FindPerson(&PersonList,argc,argv),systemLanguage);
-                break;
-            case 5:
-                SharePerson(PersonList,argc,argv,systemLanguage);
-                break;
-            case 6:
-                ResetPerson(&PersonList);
-                SavePerson(PersonList,systemLanguage);
-                break;
-            case 7:
-                DisplayPerson(PersonList,-1,systemLanguage);
-                break;
-            case 8:
-                Setting(systemLanguage);
-                SavePerson(PersonList,systemLanguage);
-                break;
-            case 9:
-                if (argc < 2)
-                {
-                    printf("Error\n");
-                    break;
-                }//避免在使用非CLI时调用
-                PrintHelp(argc,argv);
-                break;
-            case 0:
-                exit(0);
-            default:
-                printf("Error\n");
-                break;
-        }
-        if (argc >= 2) break;
-        Pasue();
-        Clear();    
     }
     return 0;
 }
