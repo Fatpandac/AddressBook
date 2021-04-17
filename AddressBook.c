@@ -15,7 +15,7 @@
 #define MaxSize            100     //通讯录数组长度
 #define CmdSize            10      //命令操数组长度
 #define LanguageLineSize   60     //语言包总行数
-#define VERSION            "0.1.9"
+#define VERSION            "0.1.11"
 
 #define Pasue() printf("%s",language[57]);\
                 getchar();\
@@ -548,40 +548,20 @@ int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[
     {
         if (!strcmp(PersonList.person[i].name,shareName))
         {
-
-            if (!strcmp(systemLanguage,"CN.txt"))           //中英文输出字符占用大小不同
-            {
-                printf("%s","+-----------------------------+\n");
-                printf("|%11s:%-20s|\n",language[33],PersonList.person[i].name);    //"联系人"
-                printf("%s","+-----------------------------+\n");
-                printf("|%10s:%-20c|\n",language[34],PersonList.person[i].sex);     //"性别"
-                printf("%s","+-----------------------------+\n");
-                printf("|%10s:%-20s|\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
-                printf("%s","+-----------------------------+\n");
-                printf("|%10s:%-20s|\n",language[36],PersonList.person[i].email);   //"电子邮箱"
-                printf("%s","+-----------------------------+\n");
-                printf("|%10s:%-20d|\n",language[37],PersonList.person[i].postCode);    //"邮编"
-                printf("%s","+-----------------------------+\n");
-                printf("|%10s:%-20s|\n",language[38],PersonList.person[i].address);     //"地址"
-                printf("%s","+-----------------------------+\n");
-                return 0;
-            }else{
-                printf("%s","+------------------------------------+\n");
-                printf("|%15s:%-20s|\n",language[33],PersonList.person[i].name);    //"联系人"
-                printf("%s","+------------------------------------+\n");
-                printf("|%15s:%-20c|\n",language[34],PersonList.person[i].sex);     //"性别"
-                printf("%s","+------------------------------------+\n");
-                printf("|%15s:%-20s|\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
-                printf("%s","+------------------------------------+\n");
-                printf("|%15s:%-20s|\n",language[36],PersonList.person[i].email);   //"电子邮箱"
-                printf("%s","+------------------------------------+\n");
-                printf("|%15s:%-20d|\n",language[37],PersonList.person[i].postCode);    //"邮编"
-                printf("%s","+------------------------------------+\n");
-                printf("|%15s:%-20s|\n",language[38],PersonList.person[i].address);     //"地址"
-                printf("%s","+------------------------------------+\n");
-                return 0;
-            }
-
+            printf("%s","┌───────────────────────────────────────────────────┐\n");
+            printf("│%-30s\t%-20s│\n",language[33],PersonList.person[i].name);    //"联系人"
+            printf("%s","├───────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20c│\n",language[34],PersonList.person[i].sex);     //"性别"
+            printf("%s","├───────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20s│\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
+            printf("%s","├───────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20s│\n",language[36],PersonList.person[i].email);   //"电子邮箱"
+            printf("%s","├───────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20d│\n",language[37],PersonList.person[i].postCode);    //"邮编"
+            printf("%s","├───────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20s│\n",language[38],PersonList.person[i].address);     //"地址"
+            printf("%s","└───────────────────────────────────────────────────┘\n");
+            return 0;
         }
     }
     printf("%s",language[42]);  //"此联系人不存在!!!\n"
@@ -602,29 +582,17 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
         return 0;
     }                              //在没有数据的时候输出
     if (key == -2) return 0;      //key 为 -2、-1、其他 时分别表示为 不输出、全输出、输出对应
-    printf("%-13s%-8s%-15s%-24s%-10s%-22s%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
+    printf("%-10s\t%-8s\t%-20s\t%-20s\t%-13s\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     if (key == -1){
         for (int i = 0;i < PersonList.lenght;i++)
         {
-            if (!strcmp(systemLanguage,"CN.txt"))
-            {
-                printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
-                printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
-            }else{
-                printf("%-13s%-8c%-15s%-24s%-10d%-22s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
-                printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
-            }
+            printf("%-10s\t%-8c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+            printf("\t%s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
         }
     }else{
         int i = key;
-        if (!strcmp(systemLanguage,"CN.txt"))
-        {
-            printf("%-10s%-6c%-13s%-20s%-8d%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
-            printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
-        }else{
-            printf("%-13s%-8c%-15s%-24s%-10d%-22s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
-            printf("%4s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
-        }
+        printf("%-20s\t%-15c\t%-20s\t%-20s\t%-20d\t%-20s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+        printf("\t%s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
     }
     return 0;
 }

@@ -55,6 +55,6 @@ Successfully modified
 [7] Display address book
 [8] Setting
 [0] exit
-Press any key to continue...
+Press enter to continue...
 No data
 Please enter the search content (start with "/" for fuzzy search):

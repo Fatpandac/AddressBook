@@ -1,2 +1,3 @@
-CN.txt
-0
+FR-FR.txt
+1
+ztf	M	13976512425	1779196284@qq.com	12345	hainanchina	1

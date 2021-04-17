@@ -1,0 +1,60 @@
+Commande d'erreur !!!
+Veuillez saisir le nom du contact ajouté:
+Entrez s'il vous plait
+Sexe de (M \ W):
+numéro de téléphone de:
+Adresse e-mail de:
+code postal de:
+adresse de:
+Définir ou non
+en tant que préoccupation particulière (O \ N):
+[1] Recherche par nom
+[2] Recherche d'adresse
+Veuillez saisir le numéro de série de la méthode de recherche correspondante:
+Veuillez saisir le contenu de la recherche:
+N'existe pas! Veuillez saisir à nouveau
+Cette propriété n'existe pas, veuillez la saisir à nouveau
+Aucune valeur n'est requise pour modifier cette propriété !!!
+Aucune valeur de modification n'a été saisie
+Veuillez saisir le nom de la personne que vous souhaitez modifier:
+[1] Modifier le nom du contact
+[2] Modifier le sexe du contact
+[3] modifier le numéro de téléphone du contact
+[4] Modifier l'adresse e-mail du contact
+[5] Modifier le code postal du contact
+[6] Modifier l'adresse de contact
+[7] Changez pour ne pas prêter attention à
+[7] Changer de focus
+Veuillez saisir le numéro de série correspondant:
+Erreur de saisie, veuillez saisir à nouveau
+Veuillez saisir la valeur modifiée:
+Le changement a échoué !!!
+Veuillez saisir le nom du contact supprimé:
+Veuillez saisir le nom de la personne que vous souhaitez partager:
+Contacter
+Sexe
+Numéro de téléphone
+E-mail
+Code postal
+Adresse
+Comme
+Oui
+Non
+Ce contact n'existe pas !!!
+Echec d'écriture !!!
+La lecture a échoué !!!
+[1] Langue
+[2] Développeurs
+Modifié avec succès
+[1] Générer des informations de contact
+[2] Modifier les informations de contact
+[3] Supprimer les informations de contact
+[4] Rechercher des informations de contact
+[5] Partager des contacts
+[6] Réinitialiser le carnet d'adresses
+[7] Afficher le carnet d'adresses
+[8] Réglage
+[0] quitter
+Appuyez sur Entrée pour continuer...
+Pas de données
+Veuillez saisir le contenu de la recherche (commencez par "/" pour une recherche floue):
