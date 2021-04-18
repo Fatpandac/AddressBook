@@ -6,11 +6,11 @@ $(Progeam) : $(objects)
 		@$(CC) -o $(Progeam) $(objects)
 		@echo + Successfully built +
 
-main.o     : language.h file.h func.h cliFunc.h global.h
-func.o     : language.h file.h func.h cliFunc.h	global.h
-cliFunc.o  : language.h cliFunc.h
+main.o     : language.h file.h global.h cliFunc.h func.h 
+cliFunc.o  : language.h file.h global.h cliFunc.h
+func.o     : language.h file.h global.h func.h 
+global.o   : language.h file.h global.h
 file.o     : language.h file.h
-global.o   : global.h
 language.o : language.h
 
 

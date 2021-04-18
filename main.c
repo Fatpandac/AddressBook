@@ -8,7 +8,7 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
     ReadPerson(&PersonList,systemLanguage);     //读取通信录数据
     LoadingLanguage(systemLanguage);    //加载语言包
     while(1)
-    {                        //每次循环初始化,用于存储操作序号
+    {
         if (argc >= 2)                  //当 argc 大于等于二时说明是 CLI 操作
         {
             switch (GetOpt(argc,argv))

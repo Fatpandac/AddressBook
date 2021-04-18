@@ -5,7 +5,6 @@
 #include "file.h"
 #include "func.h"
 #include "language.h"
-#include "cliFunc.h"
 #include "global.h"
 
 
