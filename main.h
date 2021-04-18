@@ -8,7 +8,6 @@
 #include "file.h"
 #include "func.h"
 #include "cliFunc.h"
-
-#define Ture               1
+#include "global.h"
 
 #endif

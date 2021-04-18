@@ -1,4 +1,2 @@
 ZH-CN.txt
-2
-lsl	M	13976512425	1779196284@qq.com	12345	chongqing	1
-ztf	M	13976512425	1779196284@qq.com	12345	chongqing	1
+0
