@@ -21,5 +21,6 @@ int RemovePerson(PersonList *PersonList,int argc,char *argv[]);
 int ChangePerson(PersonList *PersonList,int argc,char *argv[]);
 int FindPerson(PersonList *PersonList,int argc,char *argv[]);
 int AddPerson(PersonList *PersonList,int argc,char *argv[]);
+void DisplayVersion();
 
 #endif

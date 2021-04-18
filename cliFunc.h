@@ -1,7 +1,7 @@
 #ifndef CLIFUNC_H
 #define CLIFUNC_H
 
-#define CmdSize            10      //命令操数组长度
+#define CmdSize            11      //命令操数组长度
 //相应操作对应的序号
 #define HelpOpt 9
 #define AddOpt  1
@@ -11,6 +11,7 @@
 #define ShareOpt 5
 #define ChangeOpt 2
 #define ResetOpt 6
+#define VersionOpt 10
 
 typedef struct Opt
 {

@@ -55,6 +55,14 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
                 }//避免在使用非CLI时调用
                 PrintHelp(argc,argv);
                 break;
+            case 10:
+                if (argc < 2)
+                {
+                    printf("Error\n");
+                    break;
+                }
+                DisplayVersion();
+                break;
             case 0:
                 exit(0);
             default:

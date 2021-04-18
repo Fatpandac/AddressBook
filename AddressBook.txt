@@ -1,4 +1,4 @@
 ZH-CN.txt
 2
-ztf	M	13976512425	123	12345	hainan	1
-lsl	M	12334	1231245	123124	chongqing	0
+lsl	M	13976512425	1779196284@qq.com	12345	chongqing	1
+ztf	M	13976512425	1779196284@qq.com	12345	chongqing	1

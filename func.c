@@ -7,7 +7,7 @@
 #include "language.h"
 #include "cliFunc.h"
 
-#define VERSION            "0.1.12"
+#define VERSION            "0.1.14"
 
 
 /*
@@ -127,10 +127,10 @@ int fuzzyFind(char cmpValue[20],char findValue[20])
  */
 void DisplayFuzzyPerson(PersonList *PersonList,int findFuzzyIndex[MaxSize],int findFuzzyIndexLenght)
 {
-    printf("%-15s\t%-10s\t%-20s\t%-20s\t%-13s\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
+    printf("%-15s\t%-5s\t%-15s\t%-20s\t%-10s\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     for (int i = 0;i < findFuzzyIndexLenght;i++)
     {
-        printf("%-15s\t%-10c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList->person[findFuzzyIndex[i]].name,PersonList->person[findFuzzyIndex[i]].sex,PersonList->person[findFuzzyIndex[i]].phoneNumber,PersonList->person[findFuzzyIndex[i]].email,PersonList->person[findFuzzyIndex[i]].postCode,PersonList->person[findFuzzyIndex[i]].address);
+        printf("%-15s\t%-5c\t%-15s\t%-20s\t%-10d\t%-10s",PersonList->person[findFuzzyIndex[i]].name,PersonList->person[findFuzzyIndex[i]].sex,PersonList->person[findFuzzyIndex[i]].phoneNumber,PersonList->person[findFuzzyIndex[i]].email,PersonList->person[findFuzzyIndex[i]].postCode,PersonList->person[findFuzzyIndex[i]].address);
         printf("\t%s\n",(PersonList->person[findFuzzyIndex[i]].like == 1) ? language[40]:language[41]);   //"是" "否"
     }
 }
@@ -423,19 +423,19 @@ int SharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[
     {
         if (!strcmp(PersonList.person[i].name,shareName))
         {
-            printf("%s","┌───────────────────────────────────────────────────┐\n");
-            printf("│%-30s\t%-20s│\n",language[33],PersonList.person[i].name);    //"联系人"
-            printf("%s","├───────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20c│\n",language[34],PersonList.person[i].sex);     //"性别"
-            printf("%s","├───────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s│\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
-            printf("%s","├───────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s│\n",language[36],PersonList.person[i].email);   //"电子邮箱"
-            printf("%s","├───────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20d│\n",language[37],PersonList.person[i].postCode);    //"邮编"
-            printf("%s","├───────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s│\n",language[38],PersonList.person[i].address);     //"地址"
-            printf("%s","└───────────────────────────────────────────────────┘\n");
+            printf("%s","┌───────────────────────────────────────────────────────┐\n");
+            printf("│%-30s\t%-20s\t│\n",language[33],PersonList.person[i].name);    //"联系人"
+            printf("%s","├───────────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20c\t│\n",language[34],PersonList.person[i].sex);     //"性别"
+            printf("%s","├───────────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20s\t│\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
+            printf("%s","├───────────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20s\t│\n",language[36],PersonList.person[i].email);   //"电子邮箱"
+            printf("%s","├───────────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20d\t│\n",language[37],PersonList.person[i].postCode);    //"邮编"
+            printf("%s","├───────────────────────────────────────────────────────┤\n");
+            printf("│%-30s\t%-20s\t│\n",language[38],PersonList.person[i].address);     //"地址"
+            printf("%s","└───────────────────────────────────────────────────────┘\n");
             return 0;
         }
     }
@@ -457,16 +457,16 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
         return 0;
     }                              //在没有数据的时候输出
     if (key == -2) return 0;      //key 为 -2、-1、其他 时分别表示为 不输出、全输出、输出对应
-    printf("%-15s\t%-10s\t%-20s\t%-20s\t%-13d\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
+    printf("%-15s\t%-5s\t%-15s\t%-20s\t%-10s\t%-10s\t%s\n",language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     if (key == -1){
         for (int i = 0;i < PersonList.lenght;i++)
         {
-            printf("%-15s\t%-10c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+            printf("%-15s\t%-5c\t%-15s\t%-20s\t%-10d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
             printf("\t%s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
         }
     }else{
         int i = key;
-        printf("%-15s\t%-10c\t%-20s\t%-20s\t%-13d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
+        printf("%-15s\t%-5c\t%-15s\t%-20s\t%-10d\t%-10s",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address);
         printf("\t%s\n",(PersonList.person[i].like == 1) ? language[40]:language[41]);   //"是" "否"
     }
     return 0;
@@ -485,10 +485,15 @@ int ResetPerson(PersonList *PersonList)
 }
 
 /*
- * 简介：输出开发人员
+ * 简介：输出开发人员及版本信息
  * 作者：Fatpandac
  * 时间：2021.03.26
  */
+
+void DisplayVersion()
+{
+    printf("VERSION:%s\n",VERSION);
+}
 
 void DisplayDevelopers()
 {
@@ -502,7 +507,7 @@ void DisplayDevelopers()
     printf("TRANSLATION\n");
     printf("---------------------\n");
     printf("EN: Peng YuTing\n\n");
-    printf("VERSION:%s\n",VERSION);
+    DisplayVersion();
 }
 
 /*

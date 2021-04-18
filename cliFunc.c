@@ -7,13 +7,14 @@ Opt optList[CmdSize] = {
     {"help","-h","[help | -h] <option>\nDisplay all help when option is null or <option> help\n",3,HelpOpt},
     {"help","-h","[help | -h]\nDisplay all help\n",2,HelpOpt},
     {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,AddOpt},
-    {"view","-v","[view | -v]\nDisplay you AddressBook\n",2,ViewOpt},
+    {"list","-ls","[list | -ls]\nDisplay you AddressBook\n",2,ViewOpt},
     {"find","-f","[find | -f] <by element> <value>\nFind the element of the value,start with \"/\" for fuzzy search\n[by element | name | address]\n",4,FindOpt},
     {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,RemoveOpt},
     {"share","-s","[share | -s] <name>\nShare contact with card\n",3,ShareOpt},
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",5,ChangeOpt},
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",4,ChangeOpt},
-    {"reset","","[reset]\nReset you AddressBook\n",2,ResetOpt}
+    {"reset","","[reset]\nReset you AddressBook\n",2,ResetOpt},
+    {"version","-v","[version | -v]\nDisplay version",2,VersionOpt}
 };      //CLI操作数据
 
 /*
