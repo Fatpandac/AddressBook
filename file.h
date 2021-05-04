@@ -9,7 +9,7 @@
  * 时间：2020.03.26
  */
 
-typedef struct Person
+typedef struct
 {
     char name[10];
     char address[20];
@@ -20,7 +20,7 @@ typedef struct Person
     int like;
 }Person;        //联系人结构体
 
-typedef struct PersonList
+typedef struct
 {
     Person person[MaxSize];
     int lenght;

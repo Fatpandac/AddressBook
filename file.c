@@ -4,9 +4,8 @@
 
 /*
  * 简介：将数据保存到文件中
- * 作者：Fatpandac
- * 时间：2021.03.25
  */
+
 int SavePerson(PersonList PersonList,char systemLanguage[10])
 {
     FILE *savePerson = fopen("AddressBook.txt","wb");
@@ -26,9 +25,8 @@ int SavePerson(PersonList PersonList,char systemLanguage[10])
 
 /*
  * 简介：读取文件获取到通讯录数据
- * 作者：Fatpandac
- * 时间：2021.03.25
  */
+
 int ReadPerson(PersonList *PersonList,char systemLanguage[10])
 {
     FILE *readPerson = fopen("AddressBook.txt","rb");

@@ -9,5 +9,6 @@
 #include "func.h"
 #include "cliFunc.h"
 #include "global.h"
+#include "TUI.h"
 
 #endif

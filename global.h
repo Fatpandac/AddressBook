@@ -10,9 +10,11 @@
 #define Success() printf("%s\n",language[47]);
 #define Pasue() printf("%s",language[57]);\
                 getchar();\
-                getchar();      //"敲击任意键继续…" 两个 getchar() 为了防止吃回车现象出现
+                getchar();      //"敲击回车键继续…" 两个 getchar() 为了防止吃回车现象出现
 
 #define version "0.1.14"
+#define printTitleFormat "\33[s%s\33[u\33[10C\33[s%s\33[u\33[5C\33[s%s\33[u\33[20C\33[s%s\33[u\33[20C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C%s\33[0m\n"
+#define printBodyFormat "\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[20C\33[s%s\33[u\33[20C\33[s%d\33[u\33[15C\33[s%s\33[u\33[20C%s\33[0m\n"
 
 void DisplayVersion();
 int fuzzyFind(char cmpValue[20],char findValue[20]);

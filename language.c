@@ -14,9 +14,8 @@ char languageDirBase[] = "./language";
 
 /*
  * 简介：加载语言包
- * 作者：Fatpandac
- * 时间：2021.03.26
  */
+
 int LoadingLanguage(char systemLanguage[10])
 {
     char languageDirPath[50];
@@ -40,9 +39,8 @@ int LoadingLanguage(char systemLanguage[10])
 
 /*
  * 简介：读取 language 文件夹下的语言包，并进行系统语言选择
- * 作者：Fatpandac
- * 时间：2021.04.04
  */
+
 int GetSelectLanguage(char systemLanguage[10])
 {
     char languageDirNameList[20][10];                //存储 language 文件夹下文件名称

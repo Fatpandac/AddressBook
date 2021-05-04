@@ -10,9 +10,8 @@
 
 /*
  * 简介：输出操作目录
- * 作者：Fatpandac
- * 时间：2021.03.20
  */
+
 int Menu()
 {
     int opt;
@@ -34,8 +33,6 @@ int Menu()
 
 /*
  * 简介：添加联系人
- * 作者：Fatpandac
- * 时间：2021.03.21
  */
 
 int AddPerson(PersonList *PersonList)
@@ -80,8 +77,6 @@ int AddPerson(PersonList *PersonList)
 
 /*
  * 简介：用于查找相应元素对应值并返回物理地址
- * 作者：Fatpandac
- * 时间：2020.03.22
  */
 
 int FindPerson(PersonList *PersonList)
@@ -148,8 +143,6 @@ int FindPerson(PersonList *PersonList)
 
 /*
  * 简介：修改联系人
- * 作者：Fatpandac
- * 时间：2021.03.23
  */
 
 int ChangePerson(PersonList *PersonList)
@@ -227,8 +220,6 @@ int ChangePerson(PersonList *PersonList)
 
 /*
  * 简介：删除联系人
- * 作者：Fatpandac
- * 时间：2021.03.22
  */
 
 int RemovePerson(PersonList *PersonList)
@@ -241,8 +232,7 @@ int RemovePerson(PersonList *PersonList)
     {
         if (strcmp(PersonList->person[i].name,mvName))
         {
-           strcpy(PersonList->person[removeLenght].name , PersonList->person[i].name);
-           removeLenght++;
+           PersonList->person[removeLenght++] = PersonList->person[i];
         }    
     }  
      if (removeLenght == PersonList->lenght){
@@ -256,8 +246,6 @@ int RemovePerson(PersonList *PersonList)
 
 /*
  * 简介：分享相应联系人联系卡片
- * 作者：Fatpandac
- * 时间：2021.03.24
  */
 
 int SharePerson(PersonList PersonList,char systemLanguage[10])
@@ -269,22 +257,22 @@ int SharePerson(PersonList PersonList,char systemLanguage[10])
     {
         if (!strcmp(PersonList.person[i].name,shareName))
         {
-            printf("%s","┌───────────────────────────────────────────────────────┐\n");
-            printf("│%-30s\t%-20s\t│\n",language[33],PersonList.person[i].name);    //"联系人"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20c\t│\n",language[34],PersonList.person[i].sex);     //"性别"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s\t│\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s\t│\n",language[36],PersonList.person[i].email);   //"电子邮箱"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20d\t│\n",language[37],PersonList.person[i].postCode);    //"邮编"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s\t│\n",language[38],PersonList.person[i].address);     //"地址"
-            printf("%s","└───────────────────────────────────────────────────────┘\n");
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[33],20,PersonList.person[i].name,20);    //"联系人"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%c\33[u\33[%dC|\33[0m\n",language[34],20,PersonList.person[i].sex,20);     //"性别"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[35],20,PersonList.person[i].phoneNumber,20);     //"电话"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[36],20,PersonList.person[i].email,20);   //"电子邮箱"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%d\33[u\33[%dC|\33[0m\n",language[37],20,PersonList.person[i].postCode,20);    //"邮编"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[38],20,PersonList.person[i].address,20);     //"地址"
+            printf("%s","+----------------------------------------+\n");
             return 0;
         }
     }
-    printf("%s",language[42]);  //"此联系人不存在!!!\n"
+    printf("%s\n",language[42]);  //"此联系人不存在!!!\n"
     return 0;
 }

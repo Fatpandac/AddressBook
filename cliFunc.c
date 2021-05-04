@@ -13,7 +13,7 @@ Opt optList[CmdSize] = {
     {"add","-a","[add | -a] <name> <sex | M/w> <phone number> <email> <postcode> <address> <like | Y/n>\nCreate a new contact\n",9,AddOpt},
     {"list","-ls","[list | -ls]\nDisplay you AddressBook\n",2,ViewOpt},
     {"find","-f","[find | -f] <by element> <value>\nFind the element of the value,start with \"/\" for fuzzy search\n[by element | name | address]\n",4,FindOpt},
-    {"remove","-mv","[remove | -mv] <name>\nRemove <name>'s contact\n",3,RemoveOpt},
+    {"remove","-rm","[remove | -rm] <name>\nRemove <name>'s contact\n",3,RemoveOpt},
     {"share","-s","[share | -s] <name>\nShare contact with card\n",3,ShareOpt},
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",5,ChangeOpt},
     {"change","-chg","[change | -chg] <name> <element> <value>\nChange the value of the element\n[element | name | sex | phoneNumber | email | address | postCode | like]\n",4,ChangeOpt},
@@ -91,22 +91,20 @@ void PrintHelp(int argc,char *argv[])
 
 int CLIAddPerson(PersonList *PersonList,int argc,char *argv[])
 {
-    if (argc == optList[2].countArgument)
+    if ((toupper(argv[3][0]) == 'M' || toupper(argv[3][0]) == 'W') && (tolower(argv[8][0]) == 'y' || tolower(argv[8][0]) == 'n')) //对 sex 和 like 输入进行判断是否为合法输入
     {
-       if ((toupper(argv[3][0]) == 'M' || toupper(argv[3][0]) == 'W') && (tolower(argv[8][0]) == 'y' || tolower(argv[8][0]) == 'n')) //对 sex 和 like 输入进行判断是否为合法输入
-       {
-            strcpy(PersonList->person[PersonList->lenght].name,argv[2]);
-            PersonList->person[PersonList->lenght].sex = toupper(argv[3][0]);
-            strcpy(PersonList->person[PersonList->lenght].phoneNumber,argv[4]);
-            strcpy(PersonList->person[PersonList->lenght].email,argv[5]);
-            PersonList->person[PersonList->lenght].postCode =  atoi(argv[6]);
-            strcpy(PersonList->person[PersonList->lenght].address,argv[7]);
-            PersonList->person[PersonList->lenght].like = (tolower(argv[8][0]) == 'y') ? 1 : 0 ;
-       }else{
-           printf("%s\n",language[28]);
-       }
+        strcpy(PersonList->person[PersonList->lenght].name,argv[2]);
+        PersonList->person[PersonList->lenght].sex = toupper(argv[3][0]);
+        strcpy(PersonList->person[PersonList->lenght].phoneNumber,argv[4]);
+        strcpy(PersonList->person[PersonList->lenght].email,argv[5]);
+        PersonList->person[PersonList->lenght].postCode =  atoi(argv[6]);
+        strcpy(PersonList->person[PersonList->lenght].address,argv[7]);
+        PersonList->person[PersonList->lenght].like = (tolower(argv[8][0]) == 'y') ? 1 : 0 ;
+        PersonList->lenght++;
+    }else{
+        printf("%s\n",language[28]);
     }
-    PersonList->lenght++;
+
     return 0;
 }
 
@@ -135,7 +133,6 @@ int CLIFindPerson(PersonList *PersonList,int argc,char *argv[])
                     findFuzzyIndex[k++] = j;
                     findFuzzyIndexLenght++;
                 }
-                
             }else if (!strcmp(findElement,"address")){
                 if (fuzzyFind(PersonList->person[j].address,findValue))
                 {
@@ -182,11 +179,10 @@ int CLIRemovePerson(PersonList *PersonList,int argc,char *argv[])
     {
         if (strcmp(PersonList->person[i].name,mvName))
         {
-           strcpy(PersonList->person[removeLenght].name , PersonList->person[i].name);
-           removeLenght++;
+           PersonList->person[removeLenght++] = PersonList->person[i];
         }    
     }  
-     if (removeLenght == PersonList->lenght){
+    if (removeLenght == PersonList->lenght){
             printf("%s\n",language[42]);
     }else{
             PersonList->lenght = removeLenght;
@@ -288,19 +284,19 @@ int CLISharePerson(PersonList PersonList,int argc,char *argv[],char systemLangua
     {
         if (!strcmp(PersonList.person[i].name,shareName))
         {
-            printf("%s","┌───────────────────────────────────────────────────────┐\n");
-            printf("│%-30s\t%-20s\t│\n",language[33],PersonList.person[i].name);    //"联系人"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20c\t│\n",language[34],PersonList.person[i].sex);     //"性别"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s\t│\n",language[35],PersonList.person[i].phoneNumber);     //"电话"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s\t│\n",language[36],PersonList.person[i].email);   //"电子邮箱"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20d\t│\n",language[37],PersonList.person[i].postCode);    //"邮编"
-            printf("%s","├───────────────────────────────────────────────────────┤\n");
-            printf("│%-30s\t%-20s\t│\n",language[38],PersonList.person[i].address);     //"地址"
-            printf("%s","└───────────────────────────────────────────────────────┘\n");
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[33],20,PersonList.person[i].name,20);    //"联系人"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%c\33[u\33[%dC|\33[0m\n",language[34],20,PersonList.person[i].sex,20);     //"性别"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[35],20,PersonList.person[i].phoneNumber,20);     //"电话"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[36],20,PersonList.person[i].email,20);   //"电子邮箱"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%d\33[u\33[%dC|\33[0m\n",language[37],20,PersonList.person[i].postCode,20);    //"邮编"
+            printf("%s","+----------------------------------------+\n");
+            printf("|\33[s%s\33[u\33[%dC\33[s%s\33[u\33[%dC|\33[0m\n",language[38],20,PersonList.person[i].address,20);     //"地址"
+            printf("%s","+----------------------------------------+\n");
             return 0;
         }
     }
