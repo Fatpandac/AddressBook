@@ -40,7 +40,7 @@ char *formatIndex(char *formatContent,TitleElement titleElement,PersonList Perso
     sprintf(formatContent,"\33[%d;%dH\33[38;2;%d;%d;%dm%s\33[38;2;%d;%d;%dm%3d/%-3d\33[38;2;%d;%d;%dm%s\33[0m",
             titleElement.positionY,titleElement.positionX,
             windowsTag.titleLeft.color.rColor,windowsTag.titleLeft.color.gColor,windowsTag.titleLeft.color.bColor,windowsTag.titleLeft.tag,
-            titleElement.titleColor.rColor,titleElement.titleColor.gColor,titleElement.titleColor.bColor,windowsInfo.chooseIndex+1,PersonList.lenght,
+            titleElement.titleColor.rColor,titleElement.titleColor.gColor,titleElement.titleColor.bColor,(PersonList.lenght == 0) ? 0 : windowsInfo.chooseIndex+1,PersonList.lenght,
             windowsTag.titleRight.color.rColor,windowsTag.titleRight.color.gColor,windowsTag.titleRight.color.bColor,windowsTag.titleRight.tag);
     return formatContent;
 }
@@ -393,6 +393,7 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
     do{
         DisplayPersion(*outputPerson);
         if (outputPerson->person[outputPerson->lenght].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
+        if (outputPerson->lenght == 0) break;
     }while (++windowsInfo.chooseIndex != outputPerson->lenght);
     outputPerson->lenght++;
     DisplayPersion(*outputPerson);
@@ -404,8 +405,8 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
     {
         personList->lenght += (outputPerson == personList) ? 0 : 1;
     }else{
-        outputPerson->lenght--;
-        windowsInfo.chooseIndex--;
+        outputPerson->lenght -= (outputPerson->lenght == 0) ? 0 : 1;
+        windowsInfo.chooseIndex -= (outputPerson->lenght == 0) ? 0 : 1;
     }
     UnDisplayCursor;
 }
