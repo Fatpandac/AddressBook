@@ -300,7 +300,7 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
             changeIndex += 1;
             changeIndex %= 7;
             i = 0;
-            strcpy(changeValue,"");
+            strcpy(changeValue," ");
             printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
             if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             changePositionX = elementPreSpace[changeIndex];
