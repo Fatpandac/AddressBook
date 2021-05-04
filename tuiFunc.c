@@ -108,9 +108,9 @@ int DisplayPersion(PersonList personList)
         printf("\33[%d;2H\33[0m",j+2);
         if (i == windowsInfo.chooseIndex)
         {
-            printf(printChooseBodyFormat,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,personList.person[i].name,personList.person[i].sex,personList.person[i].phoneNumber,personList.person[i].email,personList.person[i].postCode,personList.person[i].address,(personList.person[i].like == 1) ? "是" : (personList.person[i].like == 0) ? "否" : " ");
+            printf(printChooseBodyFormat,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,personList.person[i].name,personList.person[i].sex,personList.person[i].phoneNumber,personList.person[i].email,personList.person[i].postCode,personList.person[i].address,(personList.person[i].like == 1) ? "Yes" : (personList.person[i].like == 0) ? "No" : " ");
         }else{
-            printf(tuiPrintBodyFormat,windowsInfo.unfouce.rColor,windowsInfo.unfouce.gColor,windowsInfo.unfouce.bColor,personList.person[i].name,personList.person[i].sex,personList.person[i].phoneNumber,personList.person[i].email,personList.person[i].postCode,personList.person[i].address,(personList.person[i].like == 1) ? "是" : (personList.person[i].like == 0) ? "否" : " ");
+            printf(tuiPrintBodyFormat,windowsInfo.unfouce.rColor,windowsInfo.unfouce.gColor,windowsInfo.unfouce.bColor,personList.person[i].name,personList.person[i].sex,personList.person[i].phoneNumber,personList.person[i].email,personList.person[i].postCode,personList.person[i].address,(personList.person[i].like == 1) ? "Yes" : (personList.person[i].like == 0) ? "No" : " ");
         }
     }
     return 0;
@@ -245,6 +245,7 @@ void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elem
                 strcpy(elementValue,"");
                 *i--;*elementIndex-=1;
                 my_getch();
+                printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
             }
             break;
         case 2:
@@ -273,6 +274,7 @@ void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elem
                 strcpy(elementValue,"");
                 i--;*elementIndex-=1;
                 my_getch();
+                printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
             }
             break;
         default:
@@ -299,7 +301,7 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
             changeIndex %= 7;
             i = 0;
             strcpy(changeValue,"");
-            printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "是" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "否" : " ");
+            printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
             if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             changePositionX = elementPreSpace[changeIndex];
             printf("\33[%d;%dH\33[s%*s\33[u\33[0m",changePositionY,changePositionX,elementPreSpace[changeIndex+1] - elementPreSpace[changeIndex],changeValue);
@@ -312,7 +314,7 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
             changeIndex %= 7;
             i = 0;
             strcpy(changeValue,"");
-            printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "是" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "否" : " ");
+            printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
             if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             changePositionX = elementPreSpace[changeIndex];
             printf("\33[%d;%dH\33[s%*s\33[u\33[0m",changePositionY,changePositionX,elementPreSpace[changeIndex+1] - elementPreSpace[changeIndex],changeValue);
@@ -329,7 +331,7 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
         }
         if (ch == QUIT)
         {
-            printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "是" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "否" : " ");
+            printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
             break;
         }
     }

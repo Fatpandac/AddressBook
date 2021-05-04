@@ -2,10 +2,8 @@
 #define CONTROL_H
 
 #ifdef linux
-enum keys {UP        = 65,
-           K_UP      = 107,
+enum keys {K_UP      = 107,
            W_UP      = 119,
-           DOWN      = 66,
            J_DOWN    = 106,
            S_DOWN    = 115,
            QUIT      = 27,
@@ -19,10 +17,8 @@ enum keys {UP        = 65,
            TAB       = 9};
 #endif
 #ifdef WIN32
-enum keys {UP        = 72,
-           K_UP      = 107,
+enum keys {K_UP      = 107,
            W_UP      = 119,
-           DOWN      = 80,
            J_DOWN    = 106,
            S_DOWN    = 115,
            QUIT      = 27,

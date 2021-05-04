@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <unistd.h>
-#include <termios.h>
-
 #ifdef WIN32
 #include <conio.h>
 #endif
@@ -71,28 +67,18 @@ int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPe
             ch += 80; 
         }
 #ifdef linux
-        if (ch == 27)
+        if (ch == 27 && my_getch() == 91)
         {
-            if (my_getch() == 91)
-            {
-                my_getch();
-                continue;
-            }
+            continue;
         }
 #endif
         switch (ch)
         {
-#ifdef WIN32
-        case UP:
-#endif
         case W_UP:
         case K_UP:
             windowsInfo.chooseIndex -= (windowsInfo.chooseIndex-1 < 0) ? 0 : 1;
             DisplayPersion(*outputPerson);
             break;
-#ifdef WIN32
-        case DOWN:
-#endif
         case S_DOWN:
         case J_DOWN:
             windowsInfo.chooseIndex += (windowsInfo.chooseIndex+1 >= outputPerson->lenght) ? 0 : 1;
@@ -121,6 +107,7 @@ int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPe
         case QUIT:
         case Q_QUIT:
             printf("\33[%d;0H\33[0m",windowsInfo.windowsY+2);
+            printf("\33[?25h");
             exit(0);
         }
     }
