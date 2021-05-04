@@ -4,7 +4,7 @@
  * 简介：进行 CLI 操作判断，并调用函数
  */
 
-int DoCliOpt(PersonList *PersonList,int argc,char *argv[],char systemLanguage[10])
+void DoCliOpt(PersonList *PersonList,int argc,char *argv[],char systemLanguage[10])
 {
     switch (GetOpt(argc,argv))
     {
@@ -48,7 +48,7 @@ int DoCliOpt(PersonList *PersonList,int argc,char *argv[],char systemLanguage[10
  * 简介：进行普通操作判断，并调用函数
  */
 
-int DoNormalOpt(PersonList *PersonList,char systemLanguage[10])
+void DoNormalOpt(PersonList *PersonList,char systemLanguage[10])
 {
     switch (Menu())
     {
@@ -91,11 +91,11 @@ int DoNormalOpt(PersonList *PersonList,char systemLanguage[10])
 int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入的参数
 {
     PersonList PersonList;
-    char systemLanguage[10];            //用于存储程序语言设置
+    char systemLanguage[20];            //用于存储程序语言设置
     strcpy(systemLanguage,"ZH-CN.txt");    //初始化默认为中文
     ReadPerson(&PersonList,systemLanguage);     //读取通信录数据
     LoadingLanguage(systemLanguage);    //加载语言包
-    if (!strcmp("TUI",argv[argc-1])) TUI(&PersonList,systemLanguage);
+    if (!strcmp(argv[argc-1],"TUI")) TUI(&PersonList,systemLanguage);
     if (argc >= 2)                  //当 argc 大于等于二时说明是 CLI 操作
     {
         DoCliOpt(&PersonList,argc,argv,systemLanguage);

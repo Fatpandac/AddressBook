@@ -68,10 +68,10 @@ void loadingWindowsInfo(char *content)
  * 简介：加载主题
  */
 
-int loadingTheme()
+void loadingTheme()
 {
-    int contentLenght = 0,isWindowsTag = 0;
-    char c,content[50];
+    int contentLenght = 0,isWindowsTag = 0,c;
+    char content[100];
     FILE *themeFile = fopen("theme.txt","r+");
     if (themeFile != NULL)
     {

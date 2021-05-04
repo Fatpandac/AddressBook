@@ -1,5 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <unistd.h>
+#include <termios.h>
 
 #ifdef WIN32
 #include <conio.h>
@@ -14,12 +18,12 @@
  * 简介: 兼容linux，实现 getche()
  */
 
-char my_getche()
+int my_getche()
 {
 #ifdef linux
-    char c;
+    int c;
     system("stty -icanon");
-    c=getchar();
+    c = getchar();
     system("stty icanon");
     return c; 
 #endif
@@ -32,7 +36,7 @@ char my_getche()
  * 简介: 兼容linux，实现 getch()
  */
 
-char my_getch()
+int my_getch()
 {
 #ifdef linux
     char c;
@@ -52,29 +56,43 @@ char my_getch()
  * 简介：判断对应操作并调用
  */
 
-int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPerson,char fliterName[6],char *systemLanguage)
+int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPerson,char *fliterName,char *systemLanguage)
 {
     while (1)
     {
         int ch;
         printf("\33[?25l");
-        printf("\33[%d;%dH\33[0m",windowsInfo.windowsY+1,windowsInfo.windowsX+2);
+        printf("\33[%d;%dH\33[0m",windowsInfo.windowsY-1,windowsInfo.windowsX-5);
         ch = my_getch();
         char systemTheme[50];
         if ( ch == 0xe0 )    
         {
-            ch=my_getch();
-            ch+=80; 
+            ch = my_getch();
+            ch += 80; 
         }
+#ifdef linux
+        if (ch == 27)
+        {
+            if (my_getch() == 91)
+            {
+                my_getch();
+                continue;
+            }
+        }
+#endif
         switch (ch)
         {
+#ifdef WIN32
         case UP:
+#endif
         case W_UP:
         case K_UP:
             windowsInfo.chooseIndex -= (windowsInfo.chooseIndex-1 < 0) ? 0 : 1;
             DisplayPersion(*outputPerson);
             break;
+#ifdef WIN32
         case DOWN:
+#endif
         case S_DOWN:
         case J_DOWN:
             windowsInfo.chooseIndex += (windowsInfo.chooseIndex+1 >= outputPerson->lenght) ? 0 : 1;
@@ -102,6 +120,7 @@ int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPe
             break;
         case QUIT:
         case Q_QUIT:
+            printf("\33[%d;0H\33[0m",windowsInfo.windowsY+2);
             exit(0);
         }
     }

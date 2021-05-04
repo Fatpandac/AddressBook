@@ -10,7 +10,7 @@ typedef struct rgbcolor
 
 typedef struct tag
 {
-    char tag[4];
+    char tag[10];
     rgbcolor color;
 }tag;
 
@@ -50,6 +50,6 @@ typedef struct WindowsInfo
 }WindowsInfo;
 WindowsInfo windowsInfo;
 
-int loadingTheme();
+void loadingTheme();
 
 #endif
