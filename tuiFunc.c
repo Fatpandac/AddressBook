@@ -388,7 +388,7 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
 {
     char ch,changeValue[20] = " ",tmpChangeValue[20];
     int elementPreSpace[9] = {2,12,17,32,52,62,82,87,93};
-    int addPositionY,addPositionX = elementPreSpace[4];
+    int addPositionY,addPositionX = elementPreSpace[4],preChooseIndex = windowsInfo.chooseIndex;
     InitPerson(&outputPerson->person[outputPerson->lenght]);
     do{
         DisplayPersion(*outputPerson);
@@ -406,7 +406,11 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
         personList->lenght += (outputPerson == personList) ? 0 : 1;
     }else{
         outputPerson->lenght -= (outputPerson->lenght == 0) ? 0 : 1;
-        windowsInfo.chooseIndex -= (outputPerson->lenght == 0) ? 0 : 1;
+        //windowsInfo.chooseIndex -= (outputPerson->lenght == 0) ? 0 : 1;
+        do{
+            DisplayPersion(*outputPerson);
+            if (outputPerson->lenght == 0) break;
+        }while (--windowsInfo.chooseIndex != preChooseIndex);
     }
     UnDisplayCursor;
 }

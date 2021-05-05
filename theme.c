@@ -55,6 +55,9 @@ void loadingWindowsTag(char content[50])
 
 void loadingWindowsInfo(char *content)
 {
+    sscanf(content,"logoElementX:%d",&windowsInfo.logoElement.positionX);
+    sscanf(content,"fliterElementX:%d",&windowsInfo.fliterElement.positionX);
+    sscanf(content,"indexElementX:%d",&windowsInfo.indexElement.positionX);
     sscanf(content,"logoElementColor:(%d,%d,%d)",&windowsInfo.logoElement.titleColor.rColor,&windowsInfo.logoElement.titleColor.gColor,&windowsInfo.logoElement.titleColor.bColor);
     sscanf(content,"fliterElementColor:(%d,%d,%d)",&windowsInfo.fliterElement.titleColor.rColor,&windowsInfo.fliterElement.titleColor.gColor,&windowsInfo.fliterElement.titleColor.bColor);
     sscanf(content,"indexElementColor:(%d,%d,%d)",&windowsInfo.indexElement.titleColor.rColor,&windowsInfo.indexElement.titleColor.gColor,&windowsInfo.indexElement.titleColor.bColor);
