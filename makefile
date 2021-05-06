@@ -10,16 +10,14 @@ main.o     : language.h file.h global.h cliFunc.h func.h
 
 cliFunc.o  : language.h file.h global.h cliFunc.h
 func.o     : language.h file.h global.h func.h 
-
-tuiFunc.o  : tuiFunc.h  file.h control.h theme.h global.h
-TUI.o 	   : tuiFunc.h  file.h control.h theme.h
-control.o  : tuiFunc.h  file.h control.h theme.h
-
 global.o   : language.h file.h global.h
 file.o     : language.h file.h
 language.o : language.h
-theme.o    : theme.h
 
+tuiFunc.o  : theme.h file.h control.h tuiFunc.h global.h
+TUI.o 	   : theme.h file.h control.h tuiFunc.h 
+control.o  : theme.h file.h control.h tuiFunc.h 
+theme.o    : theme.h file.h control.h
 
 .PHONY: clean
 clean :

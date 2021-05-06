@@ -100,4 +100,5 @@ void loadingTheme()
             }
         }
     }
+    fclose(themeFile);
 }
