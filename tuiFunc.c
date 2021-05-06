@@ -12,8 +12,8 @@
 #define DisplayCursor          printf("\33[?25h");
 #define UnDisplayCursor        printf("\33[?25l");
 #define printTag               "\33[38;2;%d;%d;%dm%s\33[0m"
-#define printChooseBodyFormat  "\33[38;2;%d;%d;%dm\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C\33[s% -10d\33[u\33[10C\33[s%s\33[u\33[20C%s\33[0m\n"
-#define tuiPrintBodyFormat     "\33[38;2;%d;%d;%dm\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C\33[s% -10d\33[u\33[10C\33[s%s\33[u\33[20C%s\33[0m\n"
+#define printChooseBodyFormat  "\33[38;2;%d;%d;%dm\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C\33[s%d\33[u\33[10C\33[s%s\33[u\33[20C%s\33[0m\n"
+#define tuiPrintBodyFormat     "\33[38;2;%d;%d;%dm\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C\33[s%d\33[u\33[10C\33[s%s\33[u\33[20C%s\33[0m\n"
 #define PrintGuide             printf("\33[%d;%dH\33[s\33[38;2;%d;%d;%dm%s\33[u\33[%dC\33[38;2;%d;%d;%dm"version"\33[0m",windowsInfo.guideElement.positionY,windowsInfo.guideElement.positionX,windowsInfo.guideElement.titleColor.rColor,windowsInfo.guideElement.titleColor.gColor,windowsInfo.guideElement.titleColor.bColor,windowsInfo.guideElement.TitleName,windowsInfo.windowsX-6,windowsInfo.Version.rColor,windowsInfo.Version.gColor,windowsInfo.Version.bColor);
 
 /*
@@ -289,7 +289,7 @@ void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elem
 void TableInput(PersonList *personList,PersonList *outputPerson)
 {
     char ch,changeValue[20] = " ",tmpChangeValue[20];
-    int elementPreSpace[9] = {2,12,17,32,53,62,82,87,93};
+    int elementPreSpace[9] = {2,12,17,32,52,62,82,87,93};
     int changePositionY = (windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2;
     int changePositionX = elementPreSpace[0];
     int changeIndex = 0,i = 0;
@@ -387,7 +387,7 @@ int checkInputPerson(Person *checkPerson)
 void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
 {
     char ch,changeValue[20] = " ",tmpChangeValue[20];
-    int elementPreSpace[9] = {2,12,17,32,52,62,82,87,93};
+    int elementPreSpace[8] = {2,12,17,32,52,62,82,87};
     int addPositionY,addPositionX = elementPreSpace[4],preChooseIndex = windowsInfo.chooseIndex;
     InitPerson(&outputPerson->person[outputPerson->lenght]);
     do{

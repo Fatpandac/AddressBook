@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <termios.h>
+#include <unistd.h>
 #ifdef WIN32
 #include <conio.h>
 #endif
@@ -35,13 +37,15 @@ int my_getche()
 int my_getch()
 {
 #ifdef linux
-    char c;
-    system("stty -echo");  //不回显
-    system("stty -icanon");//设置一次性读完操作，如使用getchar()读操作，不需要按enter
-    c=getchar();
-    system("stty icanon");//取消上面的设置
-    system("stty echo");//回显
-    return c;
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr( STDIN_FILENO, &oldattr  );
+    newattr = oldattr;
+    newattr.c_lflag &= ~( ICANON | ECHO  );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newattr  );
+    ch = getchar();
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr  );
+    return ch;
 #endif
 #ifdef WIN32
     return getch();
@@ -66,12 +70,6 @@ int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPe
             ch = my_getch();
             ch += 80; 
         }
-#ifdef linux
-        if (ch == 27 && my_getch() == 91)
-        {
-            continue;
-        }
-#endif
         switch (ch)
         {
         case W_UP:
