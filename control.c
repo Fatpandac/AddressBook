@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <termios.h>
-#include <unistd.h>
 #ifdef WIN32
 #include <conio.h>
+#endif
+#ifdef linux
+#include <termios.h>
+#include <unistd.h>
 #endif
 
 #include "file.h"
