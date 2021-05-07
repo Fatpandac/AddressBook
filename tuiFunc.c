@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <unistd.h>
+#include <math.h>
 
 #include "theme.h"
 #include "file.h"
@@ -12,8 +14,8 @@
 #define DisplayCursor          printf("\33[?25h");
 #define UnDisplayCursor        printf("\33[?25l");
 #define printTag               "\33[38;2;%d;%d;%dm%s\33[0m"
-#define printChooseBodyFormat  "\33[38;2;%d;%d;%dm\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C\33[s%d\33[u\33[10C\33[s%s\33[u\33[20C%s\33[0m\n"
-#define tuiPrintBodyFormat     "\33[38;2;%d;%d;%dm\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C\33[s%d\33[u\33[10C\33[s%s\33[u\33[20C%s\33[0m\n"
+#define printChooseBodyFormat  "\33[38;2;%d;%d;%dm\33[s%-20s\33[u\33[10C\33[s%-20c\33[u\33[5C\33[s%-20s\33[u\33[15C\33[s%-20s\33[u\33[20C\33[s%-20d\33[u\33[10C\33[s%-20s\33[u\33[20C%-5s\33[0m\n"
+#define tuiPrintBodyFormat     "\33[38;2;%d;%d;%dm\33[s%-20s\33[u\33[10C\33[s%-20c\33[u\33[5C\33[s%-20s\33[u\33[15C\33[s%-20s\33[u\33[20C\33[s%-20d\33[u\33[10C\33[s%-20s\33[u\33[20C%-5s\33[0m\n"
 #define PrintGuide             printf("\33[%d;%dH\33[s\33[38;2;%d;%d;%dm%s\33[u\33[%dC\33[38;2;%d;%d;%dm"version"\33[0m",windowsInfo.guideElement.positionY,windowsInfo.guideElement.positionX,windowsInfo.guideElement.titleColor.rColor,windowsInfo.guideElement.titleColor.gColor,windowsInfo.guideElement.titleColor.bColor,windowsInfo.guideElement.TitleName,windowsInfo.windowsX-6,windowsInfo.Version.rColor,windowsInfo.Version.gColor,windowsInfo.Version.bColor);
 
 /*
@@ -86,6 +88,17 @@ void InitWindows()
 }
 
 /*
+ * 简介：清除显示内容
+ */
+void clearContent()
+{
+    for (int i = 0; i < windowsInfo.windowsY-2; i++)
+    {
+        printf("\33[%d;2H%*s\33[0m",i+2,windowsInfo.windowsX-2," ");
+    }
+}
+
+/*
  * 简介：显示联系人
  */
 
@@ -97,10 +110,6 @@ int DisplayPersion(PersonList personList)
     if (windowsInfo.chooseIndex >= windowsInfo.windowsY-2)
     {
         outLenght = (windowsInfo.chooseIndex + 1) - (windowsInfo.windowsY - 2);
-    }
-    for (int i = 0; i < windowsInfo.windowsY-2; i++)
-    {
-        printf("\33[%d;2H%*s\33[0m",i+2,windowsInfo.windowsX-2," ");
     }
     for (int i = 0 + outLenght,j = 0; i < personList.lenght;i++,j++)
     {
@@ -131,6 +140,7 @@ void DoFliter(PersonList personList,char fliterName[5],PersonList *fliterPerson)
             fliterPerson->lenght = j;
         }
     }
+    clearContent();
     DisplayPersion(*fliterPerson);
 }
 
@@ -381,17 +391,37 @@ int checkInputPerson(Person *checkPerson)
 }
 
 /*
+ * 简介：进入动画
+ */
+double easein(double progressRate)
+{
+    return pow(progressRate,5);
+}
+
+/*
+ * 简介：退出动画
+ */
+double easeout(double progressRate)
+{
+    return (1-pow((progressRate-1),4));
+}
+
+/*
  * 简介：添加联系人操作
  */
 
 void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
 {
     char ch,changeValue[20] = " ",tmpChangeValue[20];
+    double progressRate;
     int elementPreSpace[8] = {2,12,17,32,52,62,82,87};
     int addPositionY,addPositionX = elementPreSpace[4],preChooseIndex = windowsInfo.chooseIndex;
     InitPerson(&outputPerson->person[outputPerson->lenght]);
+    progressRate = 0;   //初始化
     do{
+        progressRate += 1.0/(outputPerson->lenght - preChooseIndex);
         DisplayPersion(*outputPerson);
+        usleep(easein(progressRate)*10000);
         if (outputPerson->person[outputPerson->lenght].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
         if (outputPerson->lenght == 0) break;
     }while (++windowsInfo.chooseIndex != outputPerson->lenght);
@@ -401,15 +431,18 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
     DisplayCursor;
     printf("\33[%d;2H\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2);
     TableInput(personList,outputPerson);
+    UnDisplayCursor;
     if (checkInputPerson(&outputPerson->person[outputPerson->lenght-1]))
     {
         personList->lenght += (outputPerson == personList) ? 0 : 1;
     }else{
         outputPerson->lenght -= (outputPerson->lenght == 0) ? 0 : 1;
+        progressRate = 0;   //初始化
         do{
+            progressRate += 1.0/(outputPerson->lenght - preChooseIndex);
             DisplayPersion(*outputPerson);
+            usleep(easeout(progressRate)*10000);
             if (outputPerson->lenght == 0) break;
         }while (--windowsInfo.chooseIndex != preChooseIndex);
     }
-    UnDisplayCursor;
 }
