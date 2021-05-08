@@ -92,7 +92,6 @@ int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入
 {
     PersonList PersonList;
     char systemLanguage[20];            //用于存储程序语言设置
-    strcpy(systemLanguage,"ZH-CN.txt");    //初始化默认为中文
     ReadPerson(&PersonList,systemLanguage);     //读取通信录数据
     LoadingLanguage(systemLanguage);    //加载语言包
     if (!strcmp(argv[argc-1],"TUI")) TUI(&PersonList,systemLanguage);

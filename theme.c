@@ -20,7 +20,7 @@ WindowsInfo windowsInfo = {90,20,
                           {"AddressBook",4,1,{190, 138, 204}},
                           {"fliter",17,1,{190, 138, 204}},
                           {"index",80,20,{0,255,0}},
-                          {"w/k s/j: navigate, esc/Q: close, R: remove, C: change, A: add",1,21,{255,147,192}},
+                          {"w/k s/j: navigate, esc/Q: close, R: remove, C: change, A: add",2,21,{255,147,192}},
                           {255,0,0},
                           {0,255,0},
                           {0,0,255}};
