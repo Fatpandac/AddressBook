@@ -92,7 +92,7 @@ void PrintHelp(int argc,char *argv[])
 
 int CLIAddPerson(PersonList *PersonList,int argc,char *argv[])
 {
-    if ((toupper(argv[3][0]) == 'M' || toupper(argv[3][0]) == 'W') && (tolower(argv[8][0]) == 'y' || tolower(argv[8][0]) == 'n')) //对 sex 和 like 输入进行判断是否为合法输入
+    if (checkPersonSex(argv[3][0]) && checkPersonNumber(argv[4]) && checkPersonNumber(argv[6]) && checkPersonLike(argv[8][0])) //对 sex 和 like 输入进行判断是否为合法输入
     {
         strcpy(PersonList->person[PersonList->lenght].name,argv[2]);
         PersonList->person[PersonList->lenght].sex = toupper(argv[3][0]);
@@ -118,7 +118,6 @@ int CLIAddPerson(PersonList *PersonList,int argc,char *argv[])
 int CLIFindPerson(PersonList *PersonList,int argc,char *argv[])
 {
     char findElement[10],findValue[20];
-    int findElementKey;
     int findFuzzyIndex[MaxSize];     //保存模糊查找结果 index 数组
     int findFuzzyIndexLenght = 0;         //记录 findFuzzyIndex 长度
     strcpy(findElement,argv[2]);
@@ -154,7 +153,7 @@ int CLIFindPerson(PersonList *PersonList,int argc,char *argv[])
                     return i;
                 }
             }else if (!strcmp(findElement,"address")){
-                if (!strcmp(PersonList->person[i].name,findValue))
+                if (!strcmp(PersonList->person[i].address,findValue))
                 {
                     return i;
                 }

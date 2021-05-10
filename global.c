@@ -1,8 +1,42 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+
 #include "language.h"
 #include "file.h"
 #include "global.h"
+
+/*
+ * 简介：检测性别输入是否正确
+ */
+
+int checkPersonSex(char personSex)
+{
+    return (toupper(personSex) == 'M' || toupper(personSex) == 'W') ? 1 : 0;
+}
+
+/*
+ * 简介：检测电话号码以及邮编输入是否正确
+ */
+
+int checkPersonNumber(char phoneNumber[15])
+{
+    int i = 0;
+    while (phoneNumber[i] != '\0')
+    {
+        if (phoneNumber[i] < 48 || phoneNumber[i++] > 58) return 0;
+    }
+    return 1;
+}
+
+/*
+ * 简介：检测关心是否输入正确
+ */
+
+int checkPersonLike(char personLike)
+{
+    return (toupper(personLike) == 'Y' || toupper(personLike) == 'N') ? 1 : 0;
+}
 
 /*
  * 简介：模糊查找

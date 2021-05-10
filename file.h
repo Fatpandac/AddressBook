@@ -16,7 +16,7 @@ typedef struct
     int postCode;
     char sex;
     char email[20];
-    char phoneNumber[12];
+    char phoneNumber[15];
     int like;
 }Person;        //联系人结构体
 

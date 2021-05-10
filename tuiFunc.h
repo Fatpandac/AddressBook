@@ -2,6 +2,7 @@
 #define TUIFUNC_H
 
 void InitWindows();
+void clearContent();
 int DisplayPersion(PersonList personList);
 char *formatTag(char *formatContent,tag tag);
 char *formatTitle(char *formatContent,TitleElement titleElement);

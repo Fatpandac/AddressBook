@@ -228,10 +228,10 @@ void TUIRemovePerson(PersonList *personList,PersonList *outputPerson)
 }
 
 /*
- * 简介：保存联系人元素
+ * 简介：保存联系人属性
  */
 
-void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elementIndex,char elementValue[20],int savePositionY,int *i)
+void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elementIndex,char elementValue[20],int savePositionY,int *changeValueLenght)
 {
     int inPersonListIndex = -1;
     for (int i = 0; i < personList->lenght; i++)
@@ -246,43 +246,61 @@ void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elem
             strcpy(outputPerson->person[windowsInfo.chooseIndex].name,elementValue);
             break;
         case 1:
-            if (toupper(elementValue[0]) == 'M' || toupper(elementValue[0]) == 'W' )
+            if (checkPersonSex(elementValue[0]))
             {
                 personList->person[inPersonListIndex].sex = toupper(elementValue[0]);
                 outputPerson->person[windowsInfo.chooseIndex].sex = toupper(elementValue[0]);
             }else{
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2,"Plase input M/w,Hit any key to continue...");
                 strcpy(elementValue,"");
-                *i--;*elementIndex-=1;
+                *changeValueLenght--;*elementIndex-=1;
                 my_getch();
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
             }
             break;
         case 2:
-            strcpy(personList->person[inPersonListIndex].phoneNumber,elementValue);
-            strcpy(outputPerson->person[windowsInfo.chooseIndex].phoneNumber,elementValue);
+            if (checkPersonNumber(elementValue))
+            {
+                strcpy(personList->person[inPersonListIndex].phoneNumber,elementValue);
+                strcpy(outputPerson->person[windowsInfo.chooseIndex].phoneNumber,elementValue);
+            }else{
+                printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2,"Plase input the correct phone number,Hit any key to continue...");
+                strcpy(elementValue,"");
+                *changeValueLenght = 0;*elementIndex-=1;
+                my_getch();
+                printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
+            }
             break;
         case 3:
             strcpy(personList->person[inPersonListIndex].email,elementValue);
             strcpy(outputPerson->person[windowsInfo.chooseIndex].email,elementValue);
             break;
         case 4:
-            personList->person[inPersonListIndex].postCode   = atoi(elementValue);
-            outputPerson->person[windowsInfo.chooseIndex].postCode = atoi(elementValue);
+            if (checkPersonNumber(elementValue))
+            {
+                personList->person[inPersonListIndex].postCode   = atoi(elementValue);
+                outputPerson->person[windowsInfo.chooseIndex].postCode = atoi(elementValue);
+            }else{
+                printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2,"Plase input the correct postcode,Hit any key to continue...");
+                strcpy(elementValue,"");
+                *changeValueLenght = 0;*elementIndex-=1;
+                my_getch();
+                printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
+            }
             break;
         case 5:
             strcpy(personList->person[inPersonListIndex].address,elementValue);
             strcpy(outputPerson->person[windowsInfo.chooseIndex].address,elementValue);
             break;
         case 6:
-            if (toupper(elementValue[0]) == 'Y' || toupper(elementValue[0]) == 'N' )
+            if (checkPersonLike(elementValue[0]))
             {
                 personList->person[inPersonListIndex].like = (toupper(elementValue[0]) == 'Y') ? 1 : 0;
                 outputPerson->person[windowsInfo.chooseIndex].like = (toupper(elementValue[0]) == 'Y') ? 1 : 0;
             }else{
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2,"Plase input Y/N,Hit any key to continue...");
                 strcpy(elementValue,"");
-                i--;*elementIndex-=1;
+                *changeValueLenght--;*elementIndex-=1;
                 my_getch();
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
             }
@@ -302,41 +320,41 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
     int elementPreSpace[9] = {2,12,17,32,52,62,82,87,93};
     int changePositionY = (windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2;
     int changePositionX = elementPreSpace[0];
-    int changeIndex = 0,i = 0;
+    int changeIndex = 0,changeValueLenght = 0;
     while (ch = my_getche())
     {
         if (ch == TAB)
         {
             changeIndex += 1;
             changeIndex %= 7;
-            i = 0;
+            changeValueLenght = 0;
             strcpy(changeValue," ");
             printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
             if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             changePositionX = elementPreSpace[changeIndex];
             printf("\33[%d;%dH\33[s%*s\33[u\33[0m",changePositionY,changePositionX,elementPreSpace[changeIndex+1] - elementPreSpace[changeIndex],changeValue);
         } else if (ch == ENTER){
-            if (i != 0)
+            if (changeValueLenght != 0)
             {
-                SavePersonElement(personList,outputPerson,&changeIndex,changeValue,changePositionY,&i);
+                SavePersonElement(personList,outputPerson,&changeIndex,changeValue,changePositionY,&changeValueLenght);
             }
             changeIndex += 1;
             changeIndex %= 7;
-            i = 0;
+            changeValueLenght = 0;
             strcpy(changeValue,"");
             printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
             if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             changePositionX = elementPreSpace[changeIndex];
             printf("\33[%d;%dH\33[s%*s\33[u\33[0m",changePositionY,changePositionX,elementPreSpace[changeIndex+1] - elementPreSpace[changeIndex],changeValue);
         }else if(ch == BACKSPACE){
-            if (--i <= 0) strcpy(changeValue," ");
+            if (--changeValueLenght <= 0) strcpy(changeValue," ");
             changePositionX -= (changePositionX-1 >= elementPreSpace[changeIndex]) ? 1 : 0;
             strncpy(tmpChangeValue,changeValue,strlen(changeValue)-1);
             strcpy(changeValue,tmpChangeValue);
             (changePositionX > elementPreSpace[changeIndex]) ? printf(" \33[%d;%dH\33[s   \33[u",changePositionY,changePositionX) : printf("\33[%d;%dH\33[s   \33[u",changePositionY,elementPreSpace[changeIndex]);
         }else{
-            changeValue[i+1] = '\0';
-            changeValue[i++] = ch;
+            changeValue[changeValueLenght+1] = '\0';
+            changeValue[changeValueLenght++] = ch;
             changePositionX++;
         }
         if (ch == QUIT)

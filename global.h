@@ -12,10 +12,13 @@
                 getchar();\
                 getchar();      //"敲击回车键继续…" 两个 getchar() 为了防止吃回车现象出现
 
-#define version "1.0.8"
+#define version "1.0.9"
 #define printTitleFormat "\33[s%s\33[u\33[10C\33[s%s\33[u\33[5C\33[s%s\33[u\33[20C\33[s%s\33[u\33[20C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C%s\33[0m\n"
 #define printBodyFormat "\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[20C\33[s%s\33[u\33[20C\33[s%d\33[u\33[15C\33[s%s\33[u\33[20C%s\33[0m\n"
 
+int checkPersonSex(char personSex);
+int checkPersonNumber(char phoneNumber[15]);
+int checkPersonLike(char personLike);
 void DisplayVersion();
 int fuzzyFind(char cmpValue[20],char findValue[20]);
 void DisplayFuzzyPerson(PersonList *PersonList,int findFuzzyIndex[MaxSize],int findFuzzyIndexLenght);

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
 #include "file.h"
 #include "func.h"
 #include "language.h"
@@ -37,35 +38,53 @@ int Menu()
 
 int AddPerson(PersonList *PersonList)
 {
-    char input;
+    char input[20];
     printf("%s",language[1]);   //"请输入添加联系人姓名："
     scanf("%s",PersonList->person[PersonList->lenght].name);
     while (1)
     {
         printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[3]);    //"请输入" "的性别(M/W)："
-        scanf(" %c",&input);
-        if (toupper(input) == 'M' || toupper(input) == 'W')
+        scanf(" %s",input);
+        if (checkPersonSex(input[0]))
         {
-            PersonList->person[PersonList->lenght].sex = input;
+            PersonList->person[PersonList->lenght].sex = toupper(input[0]);
             break;
         }
         printf("%s\n",language[28]);
     }
-    printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[4]);     //"请输入" "的电话号码："
-    scanf(" %s",PersonList->person[PersonList->lenght].phoneNumber);
+    while (1)
+    {
+        printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[4]);     //"请输入" "的电话号码："
+        scanf(" %s",input);
+        if (checkPersonNumber(input))
+        {
+            strcpy(PersonList->person[PersonList->lenght].phoneNumber,input);
+            break;
+        }
+        printf("%s\n",language[28]);
+    }
     printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[5]);     //"请输入" "的邮箱地址："
     scanf(" %s",PersonList->person[PersonList->lenght].email);
-    printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[6]);     //"请输入" "的邮编："
-    scanf(" %d",&PersonList->person[PersonList->lenght].postCode);
+    while (1)
+    {
+        printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[6]);     //"请输入" "的邮编："
+        scanf(" %s",input);
+        if (checkPersonNumber(input))
+        {
+            PersonList->person[PersonList->lenght].postCode = atoi(input);
+            break;
+        }
+        printf("%s\n",language[28]);
+    }
     printf("%s%s%s",language[2],PersonList->person[PersonList->lenght].name,language[7]);     //"请输入" "的地址："
     scanf(" %s",PersonList->person[PersonList->lenght].address);
     while (1)
     {
         printf("%s%s%s",language[8],PersonList->person[PersonList->lenght].name,language[9]);     //"是否把" "设为特别关心(Y/n)："
-        scanf(" %c",&input);
-        if (tolower(input) == 'y' || tolower(input) == 'n')
+        scanf(" %s",input);
+        if (checkPersonLike(input[0]))
         {
-            PersonList->person[PersonList->lenght].like = (tolower(input) == 'y') ? 1 : 0;      //1表示特别关心，0反之
+            PersonList->person[PersonList->lenght].like = (tolower(input[0]) == 'y') ? 1 : 0;      //1表示特别关心，0反之
             break;
         }
         printf("%s\n",language[28]);

@@ -97,11 +97,13 @@ int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPe
         case REMOVE:
             TUIRemovePerson(personList,outputPerson);
             SavePerson(*personList,systemLanguage);
+            clearContent();
             DisplayPersion(*outputPerson);
             break;
         case ADD:
             TUIAddPerson(personList,outputPerson);
             SavePerson(*personList,systemLanguage);
+            clearContent();
             DisplayPersion(*outputPerson);
             break;
         case QUIT:
