@@ -23,7 +23,7 @@ typedef struct
 typedef struct
 {
     Person person[MaxSize];
-    int lenght;
+    int length;
 }PersonList;
 
 int SavePerson(PersonList PersonList,char systemLanguage[10]);

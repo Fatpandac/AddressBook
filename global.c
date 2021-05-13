@@ -79,7 +79,7 @@ void DisplayFuzzyPerson(PersonList *PersonList,int findFuzzyIndex[MaxSize],int f
 
 int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        //key 用于保存指定输出地址，为 -2、-1、其他 时分别表示为 不输出、全输出、输出对应
 {
-    if (PersonList.lenght <= 0 && key != -2) 
+    if (PersonList.length <= 0 && key != -2) 
     {
         printf("%s\n",language[58]);
         return 0;
@@ -87,7 +87,7 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
     if (key == -2) return 0;
     printf(printTitleFormat,language[33],language[34],language[35],language[36],language[37],language[38],language[39]);   //"联系人","性别","电话","电子邮箱","邮编","地址","关心"
     if (key == -1){
-        for (int i = 0;i < PersonList.lenght;i++)
+        for (int i = 0;i < PersonList.length;i++)
         {
             printf(printBodyFormat,PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address,(PersonList.person[i].like == 1) ? language[40]:language[41]);
         }
@@ -104,7 +104,7 @@ int DisplayPerson(PersonList PersonList,int key,char systemLanguage[10])        
 
 int ResetPerson(PersonList *PersonList)
 {
-    PersonList->lenght = 0;
+    PersonList->length = 0;
     Success();
     return 0;
 }

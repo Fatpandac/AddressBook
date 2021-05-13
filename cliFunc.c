@@ -94,14 +94,14 @@ int CLIAddPerson(PersonList *PersonList,int argc,char *argv[])
 {
     if (checkPersonSex(argv[3][0]) && checkPersonNumber(argv[4]) && checkPersonNumber(argv[6]) && checkPersonLike(argv[8][0])) //对 sex 和 like 输入进行判断是否为合法输入
     {
-        strcpy(PersonList->person[PersonList->lenght].name,argv[2]);
-        PersonList->person[PersonList->lenght].sex = toupper(argv[3][0]);
-        strcpy(PersonList->person[PersonList->lenght].phoneNumber,argv[4]);
-        strcpy(PersonList->person[PersonList->lenght].email,argv[5]);
-        PersonList->person[PersonList->lenght].postCode =  atoi(argv[6]);
-        strcpy(PersonList->person[PersonList->lenght].address,argv[7]);
-        PersonList->person[PersonList->lenght].like = (tolower(argv[8][0]) == 'y') ? 1 : 0 ;
-        PersonList->lenght++;
+        strcpy(PersonList->person[PersonList->length].name,argv[2]);
+        PersonList->person[PersonList->length].sex = toupper(argv[3][0]);
+        strcpy(PersonList->person[PersonList->length].phoneNumber,argv[4]);
+        strcpy(PersonList->person[PersonList->length].email,argv[5]);
+        PersonList->person[PersonList->length].postCode =  atoi(argv[6]);
+        strcpy(PersonList->person[PersonList->length].address,argv[7]);
+        PersonList->person[PersonList->length].like = (tolower(argv[8][0]) == 'y') ? 1 : 0 ;
+        PersonList->length++;
     }else{
         printf("%s\n",language[28]);
     }
@@ -124,7 +124,7 @@ int CLIFindPerson(PersonList *PersonList,int argc,char *argv[])
     strcpy(findValue,argv[3]);
     if (findValue[0] == '/'){
         strncpy(findValue,findValue+1,strlen(findValue));        //消除模糊匹配区别符
-        for (int j = 0,k = 0;j < PersonList->lenght;j++)
+        for (int j = 0,k = 0;j < PersonList->length;j++)
         {
             if (!strcmp(findElement,"name"))
             {   
@@ -144,7 +144,7 @@ int CLIFindPerson(PersonList *PersonList,int argc,char *argv[])
         (findFuzzyIndexLenght == 0) ? printf("%s\n",language[42]) : DisplayFuzzyPerson(PersonList,findFuzzyIndex,findFuzzyIndexLenght);
         return -2;
     }else{
-        for (int i = 0;i < PersonList->lenght;i++)
+        for (int i = 0;i < PersonList->length;i++)
         {
             if (!strcmp(findElement,"name"))
             {
@@ -175,17 +175,17 @@ int CLIRemovePerson(PersonList *PersonList,int argc,char *argv[])
     char mvName[10];        //存储被删除人姓名
     int removeLenght = 0;      //删除后长度
     strcpy(mvName,argv[2]);
-    for (int i = 0;i < PersonList->lenght;i++)
+    for (int i = 0;i < PersonList->length;i++)
     {
         if (strcmp(PersonList->person[i].name,mvName))
         {
            PersonList->person[removeLenght++] = PersonList->person[i];
         }    
     }  
-    if (removeLenght == PersonList->lenght){
+    if (removeLenght == PersonList->length){
             printf("%s\n",language[42]);
     }else{
-            PersonList->lenght = removeLenght;
+            PersonList->length = removeLenght;
     }
     return 0;
 }
@@ -201,47 +201,46 @@ int CLIChangePerson(PersonList *PersonList,int argc,char *argv[])
     char chgName[10];       //存储被求改的人姓名
     char chgValue[10];      //存储要修改的属性值
     char elementlist[7][12] = {"name","sex","phoneNumber","email","postCode","address","like"};     //可改属性数组
-    int chgElemnt;          //存储修改的属性序号
+    int chgElement;          //存储修改的属性序号
     int chgIndex;           //存储被修改者物理地址
-    for (int i = 0;i < PersonList->lenght;i++)
+    for (int i = 0;i < PersonList->length;i++)
     {
         if (!strcmp(PersonList->person[i].name,argv[2]))
         {
             strcpy(chgName,argv[2]);
             chgIndex = i;
-            if (!PersonList->lenght) printf("%s\n",language[58]);
-            for (int i = 0;i < 7;i++)
+            for (int j = 0;j < 7;j++)
             {
-                if (!strcmp(elementlist[i],argv[3]))
+                if (!strcmp(elementlist[j],argv[3]))
                 {
-                    chgElemnt = i+1;
+                    chgElement = j+1;
                     break;
                 }
             }
             break;
-        }else if (i+1 == PersonList->lenght){
+        }else if (i+1 == PersonList->length){
             printf("%s%s",argv[2],language[14]);    //"不存在!!! 请重新输入\n"
             return 0;
         }
     }
-    if (chgElemnt <= 0 || chgElemnt > 7)
+    if (chgElement <= 0 || chgElement > 7)
     {
         printf("%s\n",language[15]);    //"不存在此属性，请重新输入"
         return 0;
     }
-    if ((chgElemnt == 2 || chgElemnt == 7) && argc == 5)
+    if ((chgElement == 2 || chgElement == 7) && argc == 5)
     {
         printf("%s\n",language[16]);    //"更改此属性不需要值!!!"
         return 0;
     }       //当更改值为 sex 或 like 是不用输入
-    if (argc == optList[7].countArgument && chgElemnt != 2 && chgElemnt != 7)
+    if (argc == optList[7].countArgument && chgElement != 2 && chgElement != 7)
     {
         strcpy(chgValue,argv[4]);
-    }else if (chgElemnt != 2 && chgElemnt != 7){
+    }else if (chgElement != 2 && chgElement != 7){
         printf("%s\n",language[17]);    //"未输入修改值"
         return 0;
     }
-    switch (chgElemnt)
+    switch (chgElement)
     {
         case 1:
             strcpy(PersonList->person[chgIndex].name,chgValue);
@@ -280,7 +279,7 @@ int CLISharePerson(PersonList PersonList,int argc,char *argv[],char systemLangua
 {
     char shareName[10];
     strcpy(shareName,argv[2]);
-    for (int i = 0;i < PersonList.lenght;i++)
+    for (int i = 0;i < PersonList.length;i++)
     {
         if (!strcmp(PersonList.person[i].name,shareName))
         {

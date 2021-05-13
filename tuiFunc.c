@@ -42,7 +42,7 @@ char *formatIndex(char *formatContent,TitleElement titleElement,PersonList Perso
     sprintf(formatContent,"\33[%d;%dH\33[38;2;%d;%d;%dm%s\33[38;2;%d;%d;%dm%3d/%-3d\33[38;2;%d;%d;%dm%s\33[0m",
             titleElement.positionY,titleElement.positionX,
             windowsTag.titleLeft.color.rColor,windowsTag.titleLeft.color.gColor,windowsTag.titleLeft.color.bColor,windowsTag.titleLeft.tag,
-            titleElement.titleColor.rColor,titleElement.titleColor.gColor,titleElement.titleColor.bColor,(PersonList.lenght == 0) ? 0 : windowsInfo.chooseIndex+1,PersonList.lenght,
+            titleElement.titleColor.rColor,titleElement.titleColor.gColor,titleElement.titleColor.bColor,(PersonList.length == 0) ? 0 : windowsInfo.chooseIndex+1,PersonList.length,
             windowsTag.titleRight.color.rColor,windowsTag.titleRight.color.gColor,windowsTag.titleRight.color.bColor,windowsTag.titleRight.tag);
     return formatContent;
 }
@@ -111,7 +111,7 @@ int DisplayPersion(PersonList personList)
     {
         outLenght = (windowsInfo.chooseIndex + 1) - (windowsInfo.windowsY - 2);
     }
-    for (int i = 0 + outLenght,j = 0; i < personList.lenght;i++,j++)
+    for (int i = 0 + outLenght,j = 0; i < personList.length;i++,j++)
     {
         if (j == windowsInfo.windowsY-2) return 0;
         printf("\33[%d;2H\33[0m",j+2);
@@ -132,12 +132,12 @@ int DisplayPersion(PersonList personList)
 void DoFliter(PersonList personList,char fliterName[5],PersonList *fliterPerson)
 {
     int j = 0;
-    for (int i = 0; i < personList.lenght; i++)
+    for (int i = 0; i < personList.length; i++)
     {
         if (fuzzyFind(personList.person[i].name,fliterName))
         {
             fliterPerson->person[j++] = personList.person[i];
-            fliterPerson->lenght = j;
+            fliterPerson->length = j;
         }
     }
     clearContent();
@@ -188,7 +188,7 @@ void FliterPerson(PersonList personList,PersonList *outputPerson,PersonList *fli
     }
     if (i <= 0)
     {
-        fliterPerson->lenght = 0;
+        fliterPerson->length = 0;
         strcpy(fliterName,"");
         strcpy(windowsInfo.fliterElement.TitleName,"fliter");
         printf("%s",formatTitle(formatContent,windowsInfo.fliterElement));
@@ -203,26 +203,26 @@ void FliterPerson(PersonList personList,PersonList *outputPerson,PersonList *fli
 void TUIRemovePerson(PersonList *personList,PersonList *outputPerson)
 {
     int removeLenght = 0,countRemoveTimes = 0;
-    for (int i = 0; i < personList->lenght; i++)
+    for (int i = 0; i < personList->length; i++)
     {
         if (strcmp(personList->person[i].name,outputPerson->person[windowsInfo.chooseIndex].name))
         {
             personList->person[removeLenght++] = personList->person[i];
         }
     }
-    countRemoveTimes = personList->lenght - removeLenght;
-    personList->lenght = removeLenght;
+    countRemoveTimes = personList->length - removeLenght;
+    personList->length = removeLenght;
     if (personList != outputPerson)
     {
         removeLenght = 0;
-        for (int i = 0; i < outputPerson->lenght; i++)
+        for (int i = 0; i < outputPerson->length; i++)
         {
             if (strcmp(outputPerson->person[i].name,outputPerson->person[windowsInfo.chooseIndex].name))
             {
                 outputPerson->person[removeLenght++] = outputPerson->person[i];
             }
         }
-        outputPerson->lenght = removeLenght;
+        outputPerson->length = removeLenght;
     }
     windowsInfo.chooseIndex = (windowsInfo.chooseIndex-countRemoveTimes <= 0) ? 0 : windowsInfo.chooseIndex - countRemoveTimes;
 }
@@ -234,11 +234,11 @@ void TUIRemovePerson(PersonList *personList,PersonList *outputPerson)
 void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elementIndex,char elementValue[20],int savePositionY,int *changeValueLenght)
 {
     int inPersonListIndex = -1;
-    for (int i = 0; i < personList->lenght; i++)
+    for (int i = 0; i < personList->length; i++)
     {
         if (!strcmp(personList->person[i].name,outputPerson->person[windowsInfo.chooseIndex].name)) inPersonListIndex = i;
     }
-    if (inPersonListIndex == -1) inPersonListIndex = personList->lenght;
+    if (inPersonListIndex == -1) inPersonListIndex = personList->length;
     switch (*elementIndex)
     {
         case 0:
@@ -330,7 +330,7 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
             changeValueLenght = 0;
             strcpy(changeValue," ");
             printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
-            if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
+            if (outputPerson->person[outputPerson->length-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             changePositionX = elementPreSpace[changeIndex];
             printf("\33[%d;%dH\33[s%*s\33[u\33[0m",changePositionY,changePositionX,elementPreSpace[changeIndex+1] - elementPreSpace[changeIndex],changeValue);
         } else if (ch == ENTER){
@@ -343,7 +343,7 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
             changeValueLenght = 0;
             strcpy(changeValue,"");
             printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
-            if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
+            if (outputPerson->person[outputPerson->length-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             changePositionX = elementPreSpace[changeIndex];
             printf("\33[%d;%dH\33[s%*s\33[u\33[0m",changePositionY,changePositionX,elementPreSpace[changeIndex+1] - elementPreSpace[changeIndex],changeValue);
         }else if(ch == BACKSPACE){
@@ -359,7 +359,8 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
         }
         if (ch == QUIT)
         {
-            printf("\33[%d;2H"printChooseBodyFormat,changePositionY,windowsInfo.fouce.rColor,windowsInfo.fouce.gColor,windowsInfo.fouce.bColor,outputPerson->person[windowsInfo.chooseIndex].name,outputPerson->person[windowsInfo.chooseIndex].sex,outputPerson->person[windowsInfo.chooseIndex].phoneNumber,outputPerson->person[windowsInfo.chooseIndex].email,outputPerson->person[windowsInfo.chooseIndex].postCode,outputPerson->person[windowsInfo.chooseIndex].address,(outputPerson->person[windowsInfo.chooseIndex].like == 1) ? "Yes" : (outputPerson->person[windowsInfo.chooseIndex].like == 0) ? "No" : " ");
+            UnDisplayCursor;
+            if (outputPerson->person[outputPerson->length-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
             break;
         }
     }
@@ -434,33 +435,32 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
     double progressRate;
     int elementPreSpace[8] = {2,12,17,32,52,62,82,87};
     int addPositionY,addPositionX = elementPreSpace[4],preChooseIndex = windowsInfo.chooseIndex;
-    InitPerson(&outputPerson->person[outputPerson->lenght]);
+    InitPerson(&outputPerson->person[outputPerson->length]);
     progressRate = 0;   //初始化
     do{
-        progressRate += 1.0/(outputPerson->lenght - preChooseIndex);
+        progressRate += 1.0/(outputPerson->length - preChooseIndex);
         DisplayPersion(*outputPerson);
         usleep(easein(progressRate)*10000);
-        if (outputPerson->person[outputPerson->lenght].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
-        if (outputPerson->lenght == 0) break;
-    }while (++windowsInfo.chooseIndex != outputPerson->lenght);
-    outputPerson->lenght++;
+        if (outputPerson->person[outputPerson->length].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
+        if (outputPerson->length == 0) break;
+    }while (++windowsInfo.chooseIndex != outputPerson->length);
+    outputPerson->length++;
     DisplayPersion(*outputPerson);
-    if (outputPerson->person[outputPerson->lenght-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
+    if (outputPerson->person[outputPerson->length-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
     DisplayCursor;
     printf("\33[%d;2H\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2);
     TableInput(personList,outputPerson);
-    UnDisplayCursor;
-    if (checkInputPerson(&outputPerson->person[outputPerson->lenght-1]))
+    if (checkInputPerson(&outputPerson->person[outputPerson->length-1]))
     {
-        personList->lenght += (outputPerson == personList) ? 0 : 1;
+        personList->length += (outputPerson == personList) ? 0 : 1;
     }else{
-        outputPerson->lenght -= (outputPerson->lenght == 0) ? 0 : 1;
+        outputPerson->length -= (outputPerson->length == 0) ? 0 : 1;
         progressRate = 0;   //初始化
         do{
-            progressRate += 1.0/(outputPerson->lenght - preChooseIndex);
+            progressRate += 1.0/(outputPerson->length - preChooseIndex);
             DisplayPersion(*outputPerson);
             usleep(easeout(progressRate)*10000);
-            if (outputPerson->lenght == 0) break;
+            if (outputPerson->length == 0) break;
         }while (--windowsInfo.chooseIndex != preChooseIndex);
     }
 }

@@ -81,12 +81,12 @@ int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPe
             break;
         case S_DOWN:
         case J_DOWN:
-            windowsInfo.chooseIndex += (windowsInfo.chooseIndex+1 >= outputPerson->lenght) ? 0 : 1;
+            windowsInfo.chooseIndex += (windowsInfo.chooseIndex+1 >= outputPerson->length) ? 0 : 1;
             DisplayPersion(*outputPerson);
             break;
         case FLITER:
             FliterPerson(*personList,outputPerson,fliterPerson,fliterName);
-            outputPerson = (fliterPerson->lenght != 0) ? fliterPerson : personList;
+            outputPerson = (fliterPerson->length != 0) ? fliterPerson : personList;
             DisplayPersion(*outputPerson);
             break;
         case CHANGE:

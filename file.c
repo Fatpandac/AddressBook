@@ -14,8 +14,8 @@ int SavePerson(PersonList PersonList,char systemLanguage[10])
         printf("%s\n",language[43]);    //"写入失败"
         return 0;
     }
-    fprintf(savePerson,"%s\n%d\n",systemLanguage,PersonList.lenght);
-    for (int i = 0;i < PersonList.lenght;i++)
+    fprintf(savePerson,"%s\n%d\n",systemLanguage,PersonList.length);
+    for (int i = 0;i < PersonList.length;i++)
     {
         fprintf(savePerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList.person[i].name,PersonList.person[i].sex,PersonList.person[i].phoneNumber,PersonList.person[i].email,PersonList.person[i].postCode,PersonList.person[i].address,PersonList.person[i].like);
     }
@@ -38,8 +38,8 @@ int ReadPerson(PersonList *PersonList,char systemLanguage[10])
         fclose(saveFile);
         readPerson = fopen("AddressBook.txt","rb");
     }
-    fscanf(readPerson,"%s\n%d\n",systemLanguage,&PersonList->lenght);
-    for (int i = 0;i < PersonList->lenght;i++)
+    fscanf(readPerson,"%s\n%d\n",systemLanguage,&PersonList->length);
+    for (int i = 0;i < PersonList->length;i++)
     {
         fscanf(readPerson,"%s\t%c\t%s\t%s\t%d\t%s\t%d\n",PersonList->person[i].name,&PersonList->person[i].sex,PersonList->person[i].phoneNumber,PersonList->person[i].email,&PersonList->person[i].postCode,PersonList->person[i].address,&PersonList->person[i].like);
     }

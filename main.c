@@ -68,7 +68,7 @@ void DoNormalOpt(PersonList *PersonList,char systemLanguage[10])
             DisplayPerson(*PersonList,FindPerson(PersonList),systemLanguage);
             break;
         case 5:
-            SharePerson(*PersonList,systemLanguage);
+            SharePerson(*PersonList);
             break;
         case 6:
             ResetPerson(PersonList);
