@@ -161,6 +161,14 @@ void FliterPerson(PersonList personList,PersonList *outputPerson,PersonList *fli
     {
         char endFliterName[10] = "";
         if (input == ENTER) break;
+        if (input == QUIT)
+        {
+            fliterPerson->length = 0;
+            strcpy(fliterName,"");
+            strcpy(windowsInfo.fliterElement.TitleName,"fliter");
+            printf("%s",formatTitle(formatContent,windowsInfo.fliterElement));
+            break;
+        }
         if (input == BACKSPACE)
         {
             if (--i <= 0)

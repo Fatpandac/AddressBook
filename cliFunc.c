@@ -201,7 +201,7 @@ int CLIChangePerson(PersonList *PersonList,int argc,char *argv[])
     char chgName[10];       //存储被求改的人姓名
     char chgValue[10];      //存储要修改的属性值
     char elementlist[7][12] = {"name","sex","phoneNumber","email","postCode","address","like"};     //可改属性数组
-    int chgElement;          //存储修改的属性序号
+    int chgElemnt;          //存储修改的属性序号
     int chgIndex;           //存储被修改者物理地址
     for (int i = 0;i < PersonList->length;i++)
     {
@@ -213,7 +213,7 @@ int CLIChangePerson(PersonList *PersonList,int argc,char *argv[])
             {
                 if (!strcmp(elementlist[j],argv[3]))
                 {
-                    chgElement = j+1;
+                    chgElemnt = j+1;
                     break;
                 }
             }
@@ -223,24 +223,29 @@ int CLIChangePerson(PersonList *PersonList,int argc,char *argv[])
             return 0;
         }
     }
-    if (chgElement <= 0 || chgElement > 7)
+    if (chgElemnt <= 0 || chgElemnt > 7)
     {
         printf("%s\n",language[15]);    //"不存在此属性，请重新输入"
         return 0;
     }
-    if ((chgElement == 2 || chgElement == 7) && argc == 5)
+    if (!((chgElemnt == 3 || chgElemnt == 5) && checkPersonNumber(argv[4])))
+    {
+        printf("%s\n",language[28]);
+        return 0;
+    }
+    if ((chgElemnt == 2 || chgElemnt == 7) && argc == 5)
     {
         printf("%s\n",language[16]);    //"更改此属性不需要值!!!"
         return 0;
     }       //当更改值为 sex 或 like 是不用输入
-    if (argc == optList[7].countArgument && chgElement != 2 && chgElement != 7)
+    if (argc == optList[7].countArgument && chgElemnt != 2 && chgElemnt != 7)
     {
         strcpy(chgValue,argv[4]);
-    }else if (chgElement != 2 && chgElement != 7){
+    }else if (chgElemnt != 2 && chgElemnt != 7){
         printf("%s\n",language[17]);    //"未输入修改值"
         return 0;
     }
-    switch (chgElement)
+    switch (chgElemnt)
     {
         case 1:
             strcpy(PersonList->person[chgIndex].name,chgValue);

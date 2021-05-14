@@ -206,11 +206,21 @@ int ChangePerson(PersonList *PersonList)
         if (chgElemnt > 0 && chgElemnt <= 7) break;//判断是否输入错误
         printf("%s\n",language[28]);    //"输入错误，请重新输入\n"
     }
-    if (chgElemnt != 2 && chgElemnt != 7)
+    while (1)
     {
-        printf("%s",language[29]);  //"请输入更改的值："
-        scanf("%s",chgValue);
+        if (chgElemnt != 2 && chgElemnt != 7)
+        {
+            printf("%s",language[29]);  //"请输入更改的值："
+            scanf("%s",chgValue);
+        }
+        if ((chgElemnt == 3 || chgElemnt == 5) && checkPersonNumber(chgValue))
+        {
+            break;
+        }else{
+            printf("%s\n",language[28]);
+        }
     }
+    
     switch (chgElemnt)
     {
         case 1:
