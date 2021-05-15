@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "file.h"
 #include "language.h"
 
@@ -8,7 +9,10 @@
 
 int SavePerson(PersonList PersonList,char systemLanguage[10])
 {
-    FILE *savePerson = fopen("AddressBook.txt","wb");
+    char dataFilePath[100];     //存储数据文件地址
+    strcpy(dataFilePath,exeFilePath);
+    strcat(dataFilePath,"/AddressBook.txt");
+    FILE *savePerson = fopen(dataFilePath,"wb");
     if (savePerson == NULL)
     {
         printf("%s\n",language[43]);    //"写入失败"
@@ -29,7 +33,10 @@ int SavePerson(PersonList PersonList,char systemLanguage[10])
 
 int ReadPerson(PersonList *PersonList,char systemLanguage[10])
 {
-    FILE *readPerson = fopen("AddressBook.txt","rb");
+    char dataFilePath[100];     //存储数据文件地址
+    strcpy(dataFilePath,exeFilePath);
+    strcat(dataFilePath,"/AddressBook.txt");
+    FILE *readPerson = fopen(dataFilePath,"rb");
     if (readPerson == NULL)
     {
         /*读取失败 进入初始化并生成 AddressBook.txt */

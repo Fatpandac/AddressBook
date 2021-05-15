@@ -12,7 +12,7 @@
                 getchar();\
                 getchar();      //"敲击回车键继续…" 两个 getchar() 为了防止吃回车现象出现
 
-#define version "1.0.10"
+#define version "1.0.11"
 #define printTitleFormat "\33[s%s\33[u\33[10C\33[s%s\33[u\33[5C\33[s%s\33[u\33[20C\33[s%s\33[u\33[20C\33[s%s\33[u\33[15C\33[s%s\33[u\33[20C%s\33[0m\n"
 #define printBodyFormat "\33[s%s\33[u\33[10C\33[s%c\33[u\33[5C\33[s%s\33[u\33[20C\33[s%s\33[u\33[20C\33[s%d\33[u\33[15C\33[s%s\33[u\33[20C%s\33[0m\n"
 

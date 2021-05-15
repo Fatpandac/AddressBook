@@ -12,7 +12,7 @@ cliFunc.o  : language.h file.h global.h cliFunc.h
 func.o     : language.h file.h global.h func.h 
 global.o   : language.h file.h global.h
 file.o     : language.h file.h
-language.o : language.h
+language.o : language.h file.h
 
 tuiFunc.o  : theme.h file.h control.h tuiFunc.h global.h
 TUI.o 	   : theme.h file.h control.h tuiFunc.h 

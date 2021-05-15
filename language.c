@@ -8,21 +8,20 @@
 #include <dirent.h>
 #include <io.h>
 #endif              //在 Linux 和 Windows 不同系统环境下预处理引用不同的库
+
 #include "language.h"
-
-char languageDirBase[] = "./language";
-
+#include "file.h"
 /*
  * 简介：加载语言包
  */
 
 int LoadingLanguage(char systemLanguage[10])
 {
-    char languageDirPath[50];
-    strcpy(languageDirPath,languageDirBase);
-    strcat(languageDirPath,"/");
-    strcat(languageDirPath,systemLanguage);
-    FILE *langFile = fopen(languageDirPath,"r");
+    char languageFilePath[100];
+    strcpy(languageFilePath,exeFilePath);
+    strcat(languageFilePath,"/language/");
+    strcat(languageFilePath,systemLanguage);
+    FILE *langFile = fopen(languageFilePath,"r");
     if (langFile == NULL)
     {
         printf("%s\n","Read failure");
@@ -43,12 +42,15 @@ int LoadingLanguage(char systemLanguage[10])
 
 int GetSelectLanguage(char systemLanguage[10])
 {
-    char languageDirNameList[20][10];                //存储 language 文件夹下文件名称
+    char languageDirPath[100];                   //存储 language 文件夹地址   
+    char languageDirNameList[20][10];            //存储 language 文件夹下文件名称
     int languageDirNumber = 0;                   //存储 language 文件夹下文件个数
+    strcpy(languageDirPath,exeFilePath);
+    strcat(languageDirPath,"/language");
 #ifdef linux
     DIR *dir;
     struct dirent *ptr;
-    if ((dir=opendir(languageDirBase)) == NULL)
+    if ((dir=opendir(languageDirPath) == NULL)
     {
         perror("Open dir error...");
         return 0;
@@ -70,7 +72,7 @@ int GetSelectLanguage(char systemLanguage[10])
 #ifdef WIN32
     struct _finddata_t file;
     intptr_t hFile;
-    if (_chdir(languageDirBase))
+    if (_chdir(languageDirPath))
     {
         printf("Open dir error...");
         return 0;

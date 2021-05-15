@@ -75,7 +75,10 @@ void loadingTheme()
 {
     int contentLenght = 0,isWindowsTag = 0,c;
     char content[100];
-    FILE *themeFile = fopen("theme.txt","r+");
+    char themeFilePath[100];
+    strcpy(themeFilePath,exeFilePath);
+    strcat(themeFilePath,"/theme.txt");
+    FILE *themeFile = fopen(themeFilePath,"r+");
     if (themeFile != NULL)
     {
         while(c = fgetc(themeFile))

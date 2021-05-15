@@ -26,6 +26,8 @@ typedef struct
     int length;
 }PersonList;
 
+char exeFilePath[100];      //语言包存放地址进行外部声明
+
 int SavePerson(PersonList PersonList,char systemLanguage[10]);
 int ReadPerson(PersonList *PersonList,char systemLanguage[10]);
 

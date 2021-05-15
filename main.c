@@ -88,12 +88,18 @@ void DoNormalOpt(PersonList *PersonList,char systemLanguage[10])
     }
 }
 
-int main(int argc,char *argv[])         //argc 输入参数数量； argv 输入的参数
+int main(int argc,char *argv[])                 //argc 输入参数数量； argv 输入的参数
 {
     PersonList PersonList;
-    char systemLanguage[20];            //用于存储程序语言设置
+    char systemLanguage[20];                    //用于存储程序语言设置
+#ifdef WIN32
+    strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'\\')))[strlen(argv[0])-strlen(strrchr(argv[0],'\\'))] = '\0';
+#endif
+#ifdef liunx
+    strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'/')))[strlen(argv[0])-strlen(strrchr(argv[0],'/'))] = '\0';
+#endif                                          //初始化执行文件路径
     ReadPerson(&PersonList,systemLanguage);     //读取通信录数据
-    LoadingLanguage(systemLanguage);    //加载语言包
+    LoadingLanguage(systemLanguage);            //加载语言包
     if (!strcmp(argv[argc-1],"TUI")) TUI(&PersonList,systemLanguage);
     if (argc >= 2)                  //当 argc 大于等于二时说明是 CLI 操作
     {
