@@ -40,10 +40,10 @@ int ReadPerson(PersonList *PersonList,char systemLanguage[10])
     if (readPerson == NULL)
     {
         /*读取失败 进入初始化并生成 AddressBook.txt */
-        FILE *saveFile = fopen("AddressBook.txt","wb");
+        FILE *saveFile = fopen(dataFilePath,"wb");
         fprintf(saveFile,"%s\n%d\n","ZH-CN.txt",0);
         fclose(saveFile);
-        readPerson = fopen("AddressBook.txt","rb");
+        readPerson = fopen(dataFilePath,"rb");
     }
     fscanf(readPerson,"%s\n%d\n",systemLanguage,&PersonList->length);
     for (int i = 0;i < PersonList->length;i++)

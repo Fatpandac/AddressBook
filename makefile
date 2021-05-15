@@ -1,4 +1,4 @@
-Progeam = AddressBook
+Progeam = abk
 objects = main.o file.o func.o cliFunc.o language.o global.o TUI.o control.o tuiFunc.o theme.o
 CC = gcc
 
