@@ -95,7 +95,7 @@ int main(int argc,char *argv[])                 //argc 输入参数数量； arg
 #ifdef WIN32
     strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'\\')))[strlen(argv[0])-strlen(strrchr(argv[0],'\\'))] = '\0';
 #endif
-#ifdef liunx
+#ifdef linux
     strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'/')))[strlen(argv[0])-strlen(strrchr(argv[0],'/'))] = '\0';
 #endif                                          //初始化执行文件路径
     ReadPerson(&PersonList,systemLanguage);     //读取通信录数据

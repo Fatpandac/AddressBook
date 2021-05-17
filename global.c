@@ -19,12 +19,12 @@ int checkPersonSex(char personSex)
  * 简介：检测电话号码以及邮编输入是否正确
  */
 
-int checkPersonNumber(char phoneNumber[15])
+int checkPersonNumber(char inputNumber[15])
 {
     int i = 0;
-    while (phoneNumber[i] != '\0')
+    while (inputNumber[i] != '\0')
     {
-        if (phoneNumber[i] < 48 || phoneNumber[i++] > 58) return 0;
+        if (inputNumber[i] < 48 || inputNumber[i++] > 58) return 0;
     }
     return 1;
 }

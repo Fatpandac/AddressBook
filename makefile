@@ -1,9 +1,9 @@
-Progeam = abk
+Progeam = AddressBook
 objects = main.o file.o func.o cliFunc.o language.o global.o TUI.o control.o tuiFunc.o theme.o
 CC = gcc
 
 $(Progeam) : $(objects)
-		@$(CC) -o $(Progeam) $(objects)
+		@$(CC) -o $(Progeam) $(objects) -lm
 		@echo + Successfully built +
 
 main.o     : language.h file.h global.h cliFunc.h func.h 

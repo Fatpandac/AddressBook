@@ -66,7 +66,6 @@ int control(PersonList *personList,PersonList *outputPerson,PersonList *fliterPe
         printf("\33[?25l");
         printf("\33[%d;%dH\33[0m",windowsInfo.windowsY-1,windowsInfo.windowsX-5);
         ch = my_getch();
-        char systemTheme[50];
         if ( ch == 0xe0 )    
         {
             ch = my_getch();

@@ -73,7 +73,7 @@ void loadingWindowsInfo(char *content)
 
 void loadingTheme()
 {
-    int contentLenght = 0,isWindowsTag = 0,c;
+    int contentLength = 0,isWindowsTag = 0,c;
     char content[100];
     char themeFilePath[100];
     strcpy(themeFilePath,exeFilePath);
@@ -85,12 +85,12 @@ void loadingTheme()
         {
             if (c != ' ' && c != '\n' && c != EOF)
             {
-                content[contentLenght+1] = '\0';
-                content[contentLenght++] = c;
+                content[contentLength+1] = '\0';
+                content[contentLength++] = c;
             }
             if(c == '\n' || c == EOF)
             {
-                contentLenght = 0;
+                contentLength = 0;
                 if (!strcmp("windowsTag",content)) isWindowsTag = 1;
                 if (!strcmp("windowsInfo",content)) isWindowsTag = 0;
                 if (isWindowsTag)

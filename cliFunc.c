@@ -24,8 +24,6 @@ Opt optList[CmdSize] = {
 
 /*
  * 简介：用于判断CLI并返回相应操作函数序号
- * 作者：Fatpandac
- * 时间：2021.03.20
  */
 
 int GetOpt(int argc,char *argv[])
@@ -54,8 +52,6 @@ int GetOpt(int argc,char *argv[])
 
 /*
  * 简介：输出CLI的操作指南
- * 作者：Fatpandac
- * 时间：2021.03.20
  */
 
 void PrintHelp(int argc,char *argv[])
@@ -86,8 +82,6 @@ void PrintHelp(int argc,char *argv[])
 
 /*
  * 简介：通过CLI添加联系人
- * 作者：Fatpandac
- * 时间：2021.04.18
  */
 
 int CLIAddPerson(PersonList *PersonList,int argc,char *argv[])
@@ -111,8 +105,6 @@ int CLIAddPerson(PersonList *PersonList,int argc,char *argv[])
 
 /*
  * 简介：通过CLI查找相应元素对应值并返回
- * 作者：Fatpandac
- * 时间：2021.04.18
  */
 
 int CLIFindPerson(PersonList *PersonList,int argc,char *argv[])
@@ -166,8 +158,6 @@ int CLIFindPerson(PersonList *PersonList,int argc,char *argv[])
 
 /*
  * 简介：通过CLI删除联系人
- * 作者：Fatpandac
- * 时间：2021.03.22
  */
 
 int CLIRemovePerson(PersonList *PersonList,int argc,char *argv[])
@@ -192,8 +182,6 @@ int CLIRemovePerson(PersonList *PersonList,int argc,char *argv[])
 
 /*
  * 简介：CLI操作修改联系人
- * 作者：Fatpandac
- * 时间：2021.03.23
  */
 
 int CLIChangePerson(PersonList *PersonList,int argc,char *argv[])
@@ -276,8 +264,6 @@ int CLIChangePerson(PersonList *PersonList,int argc,char *argv[])
 
 /*
  * 简介：CLI操作分享相应联系人联系卡片
- * 作者：Fatpandac
- * 时间：2021.03.24
  */
 
 int CLISharePerson(PersonList PersonList,int argc,char *argv[],char systemLanguage[10])

@@ -95,7 +95,7 @@ int AddPerson(PersonList *PersonList)
 }
 
 /*
- * 简介：用于查找相应元素对应值并返回物理地址
+ * 简介：用于查找相应元素对应值并返回逻辑地址
  */
 
 int FindPerson(PersonList *PersonList)
@@ -166,7 +166,7 @@ int FindPerson(PersonList *PersonList)
 
 int ChangePerson(PersonList *PersonList)
 {
-    char chgName[10];       //存储被求改的人姓名
+    char chgName[10];       //存储被修改的人姓名
     char chgValue[10];      //存储要修改的属性值
     char elementlist[7][12] = {"name","sex","phoneNumber","email","postCode","address","like"};     //可改属性数组
     int chgElemnt;          //存储修改的属性序号
@@ -220,7 +220,6 @@ int ChangePerson(PersonList *PersonList)
             printf("%s\n",language[28]);
         }
     }
-    
     switch (chgElemnt)
     {
         case 1:
