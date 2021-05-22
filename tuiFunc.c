@@ -16,7 +16,7 @@
 #define printTag               "\33[38;2;%d;%d;%dm%s\33[0m"
 #define printChooseBodyFormat  "\33[38;2;%d;%d;%dm\33[s%-20s\33[u\33[10C\33[s%-20c\33[u\33[5C\33[s%-20s\33[u\33[15C\33[s%-20s\33[u\33[20C\33[s%-20d\33[u\33[10C\33[s%-20s\33[u\33[20C%-5s\33[0m\n"
 #define tuiPrintBodyFormat     "\33[38;2;%d;%d;%dm\33[s%-20s\33[u\33[10C\33[s%-20c\33[u\33[5C\33[s%-20s\33[u\33[15C\33[s%-20s\33[u\33[20C\33[s%-20d\33[u\33[10C\33[s%-20s\33[u\33[20C%-5s\33[0m\n"
-#define PrintGuide             printf("\33[%d;%dH\33[s\33[38;2;%d;%d;%dm%s\33[u\33[%dC\33[38;2;%d;%d;%dm"version"\33[0m",windowsInfo.guideElement.positionY,windowsInfo.guideElement.positionX,windowsInfo.guideElement.titleColor.rColor,windowsInfo.guideElement.titleColor.gColor,windowsInfo.guideElement.titleColor.bColor,windowsInfo.guideElement.TitleName,windowsInfo.windowsX-6,windowsInfo.Version.rColor,windowsInfo.Version.gColor,windowsInfo.Version.bColor);
+#define PrintGuide             printf("\33[%d;%dH\33[s\33[38;2;%d;%d;%dm%s\33[u\33[%dC\33[38;2;%d;%d;%dm"version"\33[0m",windowsInfo.guideElement.positionY,windowsInfo.guideElement.positionX,windowsInfo.guideElement.titleColor.rColor,windowsInfo.guideElement.titleColor.gColor,windowsInfo.guideElement.titleColor.bColor,windowsInfo.guideElement.TitleName,windowsInfo.windowsX-7,windowsInfo.Version.rColor,windowsInfo.Version.gColor,windowsInfo.Version.bColor);
 
 /*
  * 简介：格式化输出标题
@@ -63,7 +63,7 @@ char *formatTag(char *formatContent,tag tag)
 
 void InitWindows()
 {
-    char formatContent[100];
+    char formatContent[120];
     Clear();
     printf("\33[0;0H\33[0m");
     printf("%s",formatTag(formatContent,windowsTag.leftUp));
@@ -157,7 +157,7 @@ void FliterPerson(PersonList personList,PersonList *outputPerson,PersonList *fli
     strcpy(windowsInfo.fliterElement.TitleName,"f     ");
     printf("%s",formatTitle(formatContent,windowsInfo.fliterElement));
     printf("\33[%d;%dH%s\33[0m",windowsInfo.fliterElement.positionY,windowsInfo.fliterElement.positionX+3,fliterName);
-    while (input = my_getche())
+    while ((input = my_getche()))
     {
         char endFliterName[10] = "";
         if (input == ENTER) break;
@@ -189,7 +189,7 @@ void FliterPerson(PersonList personList,PersonList *outputPerson,PersonList *fli
         {
             strncpy(endFliterName,fliterName,strlen(fliterName)-1);
             strcpy(fliterName,endFliterName);
-            printf("\33[%d;%dH%-4s\33[38;2;%d;%d;%dm%s%s\33[0m",windowsInfo.fliterElement.positionY,windowsInfo.fliterElement.positionX+3,fliterName,windowsTag.titleRight.color.rColor,windowsTag.titleRight.color.gColor,windowsTag.titleRight.color.bColor,windowsTag.titleRight.tag);
+            printf("\33[%d;%dH%-4s\33[38;2;%d;%d;%dm%s\33[0m",windowsInfo.fliterElement.positionY,windowsInfo.fliterElement.positionX+3,fliterName,windowsTag.titleRight.color.rColor,windowsTag.titleRight.color.gColor,windowsTag.titleRight.color.bColor,windowsTag.titleRight.tag);
             break;
         }
         printf("\33[%d;%dH%s\33[0m",windowsInfo.fliterElement.positionY,windowsInfo.fliterElement.positionX+3,fliterName);
@@ -261,7 +261,8 @@ void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elem
             }else{
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2,"Plase input M/w,Hit any key to continue...");
                 strcpy(elementValue,"");
-                *changeValueLenght--;*elementIndex-=1;
+                *changeValueLenght -= 1;
+                *elementIndex -= 1;
                 my_getch();
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
             }
@@ -308,7 +309,8 @@ void SavePersonElement(PersonList *personList,PersonList *outputPerson,int *elem
             }else{
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2,"Plase input Y/N,Hit any key to continue...");
                 strcpy(elementValue,"");
-                *changeValueLenght--;*elementIndex-=1;
+                *changeValueLenght -= 1;
+                *elementIndex -= 1;
                 my_getch();
                 printf("\33[%d;2H\33[s%-*s\33[u\33[0m",savePositionY,windowsInfo.windowsX-2," ");
             }
@@ -329,7 +331,7 @@ void TableInput(PersonList *personList,PersonList *outputPerson)
     int changePositionY = (windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2;
     int changePositionX = elementPreSpace[0];
     int changeIndex = 0,changeValueLenght = 0;
-    while (ch = my_getche())
+    while ((ch = my_getche()))
     {
         if (ch == TAB)
         {

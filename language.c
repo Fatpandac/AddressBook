@@ -50,7 +50,7 @@ int GetSelectLanguage(char systemLanguage[10])
 #ifdef linux
     DIR *dir;
     struct dirent *ptr;
-    if ((dir=opendir(languageDirPath) == NULL)
+    if ((dir=opendir(languageDirPath)) == NULL)
     {
         perror("Open dir error...");
         return 0;

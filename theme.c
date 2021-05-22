@@ -78,7 +78,7 @@ void loadingTheme()
     char themeFilePath[100];
     strcpy(themeFilePath,exeFilePath);
     strcat(themeFilePath,"/theme.txt");
-    FILE *themeFile = fopen(themeFilePath,"r+");
+    FILE *themeFile = fopen(themeFilePath,"r");
     if (themeFile != NULL)
     {
         while(c = fgetc(themeFile))
@@ -91,8 +91,8 @@ void loadingTheme()
             if(c == '\n' || c == EOF)
             {
                 contentLength = 0;
-                if (!strcmp("windowsTag",content)) isWindowsTag = 1;
-                if (!strcmp("windowsInfo",content)) isWindowsTag = 0;
+                if (!strncmp("windowsTag",content,strlen("windowsTag"))) isWindowsTag = 1;
+                if (!strncmp("windowsInfo",content,strlen("windowsInfo"))) isWindowsTag = 0;
                 if (isWindowsTag)
                 {
                     loadingWindowsTag(content);

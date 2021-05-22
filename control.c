@@ -39,15 +39,13 @@ int my_getche()
 int my_getch()
 {
 #ifdef linux
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr( STDIN_FILENO, &oldattr  );
-    newattr = oldattr;
-    newattr.c_lflag &= ~( ICANON | ECHO  );
-    tcsetattr( STDIN_FILENO, TCSANOW, &newattr  );
-    ch = getchar();
-    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr  );
-    return ch;
+    char c;
+    system("stty -icanon"); //关闭终端缓冲区
+    system("stty -echo"); //关闭终端回显
+    c = getchar();
+    system("stty icanon"); //打开终端缓冲区
+    system("stty echo"); //打开终端回显
+    return c;
 #endif
 #ifdef WIN32
     return getch();
