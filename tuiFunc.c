@@ -447,13 +447,14 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
     int addPositionY,addPositionX = elementPreSpace[4],preChooseIndex = windowsInfo.chooseIndex;
     InitPerson(&outputPerson->person[outputPerson->length]);
     progressRate = 0;   //初始化
-    do{
-        progressRate += 1.0/(outputPerson->length - preChooseIndex);
-        DisplayPersion(*outputPerson);
-        usleep(easein(progressRate)*10000);
-        if (outputPerson->person[outputPerson->length].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
-        if (outputPerson->length == 0) break;
-    }while (++windowsInfo.chooseIndex != outputPerson->length);
+    if (outputPerson->length != 0){
+        do{
+            progressRate += 1.0/(outputPerson->length - preChooseIndex);
+            DisplayPersion(*outputPerson);
+            usleep(easein(progressRate)*10000);
+            if (outputPerson->person[outputPerson->length].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
+        }while (++windowsInfo.chooseIndex != outputPerson->length);
+    }
     outputPerson->length++;
     DisplayPersion(*outputPerson);
     if (outputPerson->person[outputPerson->length-1].postCode == -1) printf("\33[%d;52H%s\33[0m",(windowsInfo.chooseIndex >= windowsInfo.windowsY-2) ? windowsInfo.windowsY-1 : windowsInfo.chooseIndex+2,"  ");
@@ -466,11 +467,12 @@ void TUIAddPerson(PersonList *personList,PersonList *outputPerson)
     }else{
         outputPerson->length -= (outputPerson->length == 0) ? 0 : 1;
         progressRate = 0;   //初始化
-        do{
-            progressRate += 1.0/(outputPerson->length - preChooseIndex);
-            DisplayPersion(*outputPerson);
-            usleep(easeout(progressRate)*10000);
-            if (outputPerson->length == 0) break;
-        }while (--windowsInfo.chooseIndex != preChooseIndex);
+        if (outputPerson->length != 0){
+            do{
+                progressRate += 1.0/(outputPerson->length - preChooseIndex);
+                DisplayPersion(*outputPerson);
+                usleep(easeout(progressRate)*10000);
+            }while (--windowsInfo.chooseIndex != preChooseIndex);
+        }
     }
 }
