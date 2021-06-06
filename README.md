@@ -1,72 +1,72 @@
 # AddressBook
 
-用于记录联系方式的小工具，支持CLI。
+Just a address book in terminal with ``CLI`` and ``TUI`` .  
 
-## 实现功能
+🌎 English | [中文](README-CN.md)
 
-1. 添加联系方式
-2. 修改联系方式
-3. 删除联系方式
-4. 查找联系方式（姓名查找，地址查找，号码查找）
-5. 分享联系人卡片
-6. 重置通讯录
-7. 支持CLI 操作方式
+## 💻Screenshot
+![screenshot](./screenshot.gif)
 
-## CLI
+## ✨ Features
 
-1. 添加联系方式  
-   longOptName: ``add``  
-   shortOptName: ``-a``  
-   command:  
-   ``./AddressBook add <name>``  
-   or  
-   ``./AddressBook -a <name>``  
+1. Generate contact information
+2. Modify contact information
+3. Delete contact information
+4. Find contact information (by name, address and phone number)
+5. Share contacts
+6. Reset address book
+7. Support ``CLI`` and ``TUI``
+8. Design yourself theme
+9. Add language pack
 
-2. 修改联系方式  
-   longOptName: ``change``  
-   shortOptName: ``-chg``  
-   command:  
-   ``./AddressBook change <name> <element> <value>``  
-   or  
-   ``./AddressBook -chg <name> <element> <value>``  
+## ⚙️ How to designing yourself theme ?
 
-3. 删除联系方式  
-   longOptName: ``remove``  
-   shortOptName: ``-mv``  
-   command: ``./AddressBook remove <name>`` or ``./AddressBook -mv <name>``  
+1. You need create a file called ``theme.txt``.
+2. Put it in to the AddressBook folder.
+3. Then, you can strat to design yourself theme.  
+   Here are some configurations:  
 
-4. 查找联系方式  
-   longOptName: ``find``  
-   shortOptName: ``-f``  
-   command:  
-   ``./AddressBook find <by element> <value>``  
-   or  
-   ``./AddressBook -f <by element> value``  
+   **config tags for windows**
+   - You have to write ``windowstag`` before you write windows tags configuration.
+   - ``rightUpTag``, ``leftUpTag``, ``rightDownTag``, ``leftDownTag``, ``upAndDownTag``, ``leftAndRightTag``, ``tittleLeftTag`` and ``tittlrRightTag`` is to modify the tag configuration.
+   - ``rightUpColor``, ``leftUpColor``, ``rightDownColor``, ``leftDownColor``, ``upAndDownColor``, ``leftAndRightColor``, ``tittleLeftColor`` and ``tittlrRightColor`` is to modify the tag color configuration.  
 
-5. 分享联系人卡片  
-   longOptName：``share``  
-   shortOptName: ``-s``  
-   command:  
-   ``./AddressBook share <name>``  
-   or  
-   ``./AddressBook -s <name>``  
+   **config information for windows**
+   - You have to write ``windowsInfo`` before you write windows information configuration.  
+   - ``logoElementX``, ``fliterElementX`` and ``indexElementX`` is to modify the element's position.
+   - ``logoElementColor``, ``fliterElementColor``, ``indexElementColor``, ``guideElementColor``, ``foucerColor``, ``unforceColor``, and ``versionColor`` is to modify the element's color.  
 
-6. 查看通讯录  
-   longOptName: ``view``  
-   shortOptName: ``-v``  
-   command:  
-   ``./AddressBook view``  
-   or  
-   ``./AddressBook -v``  
+**📝 e.g. >>> [theme.txt](theme.txt)**
 
-7. 重置通讯录  
-   longOptName: ``reset``  
-   command: ``./AddressBook reset``  
+```
+windowsTag
+    rightUpTag:╮
+    rightDownTag:╯
+    leftUpTag:╭
+    leftDownTag:╰
+    upAndDownTag:─
+    leftAndRightTag:│
+    titleLeftTag:<
+    titleRightTag:>
+    rightUpColor:(0,255,255)
+    rightDownColor:(0,255,255)
+    leftUpColor:(0,255,255)
+    leftDownColor:(0,255,255)
+    upAndDownColor:(0,255,255)
+    leftAndRightColor:(0,255,255)
+    titleLeftColor:(255,0,0)
+    titleRightColor:(255,0,0)
 
-8. 查看命令行操作  
-   longOptName: ``help``  
-   shortOptName: ``-h``
-   command:  
-   ``./AddressBook help <option>``  
-   or  
-   ``./AddressBook -h <optList>``
+windowsInfo
+    logoElementX:3
+    fliterElementX:17
+    logoElementColor:(165,42,42)
+    fliterElementColor:(165,42,42)
+    indexElementColor:(0,255,255)
+    fouceColor:(255,0,0)
+    unfouceColor:(244,164,96)
+
+```
+
+## 🤝 Contribute
+PR, Forks and any issue are welcome!

@@ -1,2 +1,2 @@
-EN-US.txt
+ZH-CN.txt
 0
