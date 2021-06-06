@@ -1,11 +1,11 @@
 # AddressBook
 
-Just a address book in terminal with ``CLI`` and ``TUI`` .  
+Just an address book in terminal with ``CLI`` and ``TUI`` .  
 
 🌎 English | [中文](README-CN.md)
 
 ## 💻Screenshot
-![screenshot](./screenshot.gif)
+![screenshot](https://media.giphy.com/media/lViD89siZOBcxDkrTA/giphy.gif)
 
 ## ✨ Features
 
