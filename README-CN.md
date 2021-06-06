@@ -6,7 +6,7 @@
 🌎 [English](README.md) | 中文
 
 ## 💻运行
-![screenshot](https://media.giphy.com/media/lViD89siZOBcxDkrTA/giphy.gif)
+![screenshot](https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBdDZScWFPaURhNk5rRnQ1QllMVzZmbUpuME8t.gif)
 
 ## ✨ 功能
 

@@ -5,7 +5,7 @@ Just an address book in terminal with ``CLI`` and ``TUI`` .
 🌎 English | [中文](README-CN.md)
 
 ## 💻Screenshot
-![screenshot](https://media.giphy.com/media/lViD89siZOBcxDkrTA/giphy.gif)
+![screenshot](https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBdDZScWFPaURhNk5rRnQ1QllMVzZmbUpuME8t.gif)
 
 ## ✨ Features
 
