@@ -93,10 +93,21 @@ int main(int argc,char *argv[])                 //argc 输入参数数量； arg
     PersonList PersonList;
     char systemLanguage[20];                    //用于存储程序语言设置
 #ifdef WIN32
-    strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'\\')))[strlen(argv[0])-strlen(strrchr(argv[0],'\\'))] = '\0';
+    if (strcmp(argv[0],"AddressBook"))
+    {
+        strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'\\')))[strlen(argv[0])-strlen(strrchr(argv[0],'\\'))] = '\0';
+    }else{
+        strcpy(exeFilePath,".\\");
+    }
 #endif
 #ifdef linux
-    strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'/')))[strlen(argv[0])-strlen(strrchr(argv[0],'/'))] = '\0';
+    if (strcmp(argv[0],"AddressBook")) 
+    {
+        strncpy(exeFilePath,argv[0],strlen(argv[0])-strlen(strrchr(argv[0],'/')))[strlen(argv[0])-strlen(strrchr(argv[0],'/'))] = '\0';
+    }else{
+        strcpy(exeFilePath,"./");
+    }
+    
 #endif                                          //初始化执行文件路径
     ReadPerson(&PersonList,systemLanguage);     //读取通信录数据
     LoadingLanguage(systemLanguage);            //加载语言包
