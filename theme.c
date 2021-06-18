@@ -102,6 +102,6 @@ void loadingTheme()
                 if (c == EOF) break;
             }
         }
-    }
     fclose(themeFile);
+    }
 }
